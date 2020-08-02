@@ -1,3 +1,4 @@
+# 微信宿舍报修助手小程序
 ## 页面说明/miniprogram/pages
 | 页面 | 名称 | 说明 |
 |------|------------|------------|
@@ -34,6 +35,23 @@
 # 项目部署流程
 > 前提条件，注册了小程序，开通了云开发
 
-## 步骤一：导入源码
+## 步骤一：导入项目源码
+`1.导入源码后，打开app.js文件，找到如下代码修改云环境：`
+```javascript
+wx.cloud.init({
+   env: '云环境ID', // 打开云控制台可获取
+   traceUser: true
+})
+```
+## 步骤二：上传部署云函数
+> 前提条件，你的电脑部署nodejs 8.9 以上环境，上传云函数时，选择上传并部署：云端安装依赖（不上传 node modules）
 
-## 步骤二：导入数据库
+`找到cloudfunctions目录，鼠标右键，分别上传并部署（db_delete，login，templateMessage）云函数。`
+
+## 步骤三：导入数据库
+`1.打开云开发控制台，选择数据库，然后分别新建如下集合applyData，completeData，building，templateMessage，verify，share。`<br>
+`2.找到找到源码下的databases目录，导入相应记录。`<br>
+`3.verify下的openid字段值，修改为自己的openid。`
+
+# 项目体验
+![](https://images.gitee.com/uploads/images/2020/0802/162651_03c700f4_7392036.jpeg)
