@@ -1,56 +1,53 @@
 <!-- 通告栏 -->
 <view class="notice-container">
-  <van-notice-bar
-left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png"
-  text="请同学们如实填写信息,方便维修人员对应进行维修。请同学们推广使用,谢谢大家。"
-  speed="40"
-/>
+	<van-notice-bar left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" text="请同学们如实填写信息,方便维修人员对应进行维修。请同学们推广使用,谢谢大家。" speed="40" />
 </view>
+
 <!-- 申报项 -->
 <view class="apply-item">
-  <text>申报人：</text>
-  <input class="in-1" maxlength="5" bindinput="getName"></input>
+	<text>申报人：</text>
+	<input class="in-1" maxlength="5" bindinput="getName"></input>
 </view>
 
 <view class="apply-item">
-  <text>申报宿舍：</text>
-  <input class="in-2" type="number" maxlength="2" minlength="1" bindinput="getBuilding"></input>
-  <text>栋</text>
-  <input class="in-3" type="number" maxlength="4" minlength="3" bindinput="getDormNum"></input>
+	<text>申报宿舍：</text>
+	<input class="in-2" type="number" maxlength="2" minlength="1" bindinput="getBuilding"></input>
+	<text>栋</text>
+	<input class="in-3" type="number" maxlength="4" minlength="3" bindinput="getDormNum"></input>
 </view>
 
 <view class="apply-item">
-  <text>联系电话：</text>
-  <input class="in-4" type="number" maxlength="11" minlength="11" bindinput="getPhone"></input>
+	<text>联系电话：</text>
+	<input class="in-4" type="number" maxlength="11" minlength="11" bindinput="getPhone"></input>
 </view>
 
 <view class="apply-desc">
-  <text >申报描述：</text>
-  <view class="apply-desc-textarea">
-    <textarea class="in-5" placeholder="说明损坏情况" placeholder-style="color:#ccc;font-size:14px;" type="string" maxlength="40" minlength="3" bindinput="getDetail"></textarea>
-  </view>
+	<text >申报描述：</text>
+	<view class="apply-desc-textarea">
+		<textarea class="in-5" placeholder="说明损坏情况" placeholder-style="color:#ccc;font-size:14px;" type="string" maxlength="40" minlength="3" bindinput="getDetail"></textarea>
+	</view>
 </view>
 <!-- 申报分类 -->
 <view class="status-container">
-  <view class="status-ordinary">
-    <view class="status-title">普通维修</view>
-    <view class="status-radio">
-      <van-radio-group value="{{ radio }}" bind:change="statusChoose">
-        <van-radio name="普通维修"></van-radio>
-      </van-radio-group>
-    </view>
-  </view>
-  <view class="status-pressing">
-    <view class="status-title">紧急维修</view>
-    <view class="status-radio">
-      <van-radio-group value="{{ radio }}" bind:change="statusChoose">
-        <van-radio name="紧急维修"></van-radio>
-      </van-radio-group>
-    </view>
-  </view>
+	<view class="status-ordinary">
+		<view class="status-title">普通维修</view>
+		<view class="status-radio">
+			<van-radio-group value="{{ radio }}" bind:change="statusChoose">
+				<van-radio name="普通维修"></van-radio>
+			</van-radio-group>
+		</view>
+	</view>
+	<view class="status-pressing">
+		<view class="status-title">紧急维修</view>
+		<view class="status-radio">
+			<van-radio-group value="{{ radio }}" bind:change="statusChoose">
+				<van-radio name="紧急维修"></van-radio>
+			</van-radio-group>
+		</view>
+	</view>
 </view>
 
 <!-- 提交申报 -->
 <view class="apply-btn">
-  <button type="primary" bindtap="inApplyData">提交</button>
+	<button type="primary" bindtap="inApplyData">提交</button>
 </view>

@@ -11,7 +11,7 @@
 <view class="apply-list">
   <van-tabs swipeable>
     <van-tab title="当前未处理">
-      <scroll-view scroll-y="true" style="height:{{scrollHeight}}px">
+      <scroll-view bindscrolltolower="toLower" scroll-y="true" style="height:{{scrollHeight}}px">
       <block wx:for="{{applyData}}" wx:key="applyData">
       <view class="apply-item">
         <van-card

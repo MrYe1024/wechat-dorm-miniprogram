@@ -1,5 +1,7 @@
 const app = getApp()
-import { icon_url } from '../../common/api.js'
+import {
+  icon_url
+} from '../../utils/api.js'
 const db = wx.cloud.database()
 const _ = db.command
 
@@ -7,7 +9,7 @@ Page({
 
   data: {
     radio: '普通维修',
-    icon:icon_url.ordinary_icon 
+    icon: icon_url.ordinary_icon
   },
 
   onLoad: function (options) {
@@ -20,17 +22,17 @@ Page({
       this.setData({
         icon: icon_url.press_icon
       })
-    }else {
+    } else {
       this.setData({
         icon: icon_url.ordinary_icon
       })
     }
     this.setData({
-      radio:e.detail
+      radio: e.detail
     })
   },
 
-  // 申报表单数据
+  // 填写申报表单
   getName(e) {
     this.setData({
       name: e.detail.value.trim()
@@ -57,36 +59,36 @@ Page({
 
   getDetail(e) {
     this.setData({
-      detail:e.detail.value
+      detail: e.detail.value
     })
   },
 
   // 提交申报表
   inApplyData() {
     this.verifyData((verify) => {
-      if(verify) {
+      if (verify) {
         db.collection('applyData').add({
           data: {
-            name:this.data.name,
-            dorm:this.data.building+'栋'+this.data.dormNum,
-            phone:this.data.phone,
-            detail:this.data.detail,
-            tag:this.data.radio,
-            status:'未处理',
-            icon_url:this.data.icon,
-            week:app.globalData.week,
-            date:app.globalData.obj_date.date,
-            month:app.globalData.obj_date.month
+            name: this.data.name,
+            dorm: this.data.building + '栋' + this.data.dormNum,
+            phone: this.data.phone,
+            detail: this.data.detail,
+            tag: this.data.radio,
+            status: '未处理',
+            icon_url: this.data.icon,
+            week: app.globalData.week,
+            date: app.globalData.obj_date.date,
+            month: app.globalData.obj_date.month
           }
         }).then(res => {
           wx.showToast({
             title: '提交成功',
-            icon:'success',
-            duration:1000,
-            success:() => {
-              let dorm = this.data.building+'栋'+this.data.dormNum
+            icon: 'success',
+            duration: 1000,
+            success: () => {
+              let dorm = this.data.building + '栋' + this.data.dormNum
               wx.navigateTo({
-                url: '../success/success?dorm='+dorm+'&submit'
+                url: '../success/success?dorm=' + dorm + '&submit'
               })
             }
           })
@@ -100,11 +102,11 @@ Page({
   // 申报表验证
   verifyData(callback) {
     let cp = /[1][3,4,5,7,8][0-9]{9}$/
-    if (this.data.name === '' || this.data.name === undefined){
+    if (this.data.name === '' || this.data.name === undefined) {
       wx.showToast({
         title: '请填写姓名',
-        icon:'loading',
-        duration:500
+        icon: 'loading',
+        duration: 500
       })
       return false;
     }
@@ -132,7 +134,7 @@ Page({
       })
       return false;
     }
-    if (!cp.test(this.data.phone)){
+    if (!cp.test(this.data.phone)) {
       wx.showToast({
         title: '请填写正确手机号',
         icon: 'loading',

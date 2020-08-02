@@ -11,10 +11,12 @@
 		"coverView": true,
 		"nodeModules": true,
 		"autoAudits": false,
+		"scopeDataCheck": false,
 		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": false,
 		"uploadWithSourceMap": true,
+		"compileHotReLoad": false,
 		"babelSetting": {
 			"ignore": [],
 			"disablePlugins": [],
@@ -22,9 +24,7 @@
 		},
 		"useIsolateContext": true,
 		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": false,
-		"compileHotReLoad": false,
-		"scopeDataCheck": false
+		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"appid": "wx7273f8f3dff4386d",
 	"projectname": "%E5%AE%BF%E8%88%8D%E6%8A%A5%E4%BF%AE%E5%8A%A9%E6%89%8B",

@@ -1,14 +1,15 @@
 const app = getApp()
 const db = wx.cloud.database()
 const _ = db.command
+const limit = 20
 
 Page({
 
   data: {
-    scrollHeight:380,
+    scrollHeight: 380,
     columns: ['全部宿舍', '1栋', '2栋', '3栋', '4栋'],
-    applyData:[],
-    finishData:[]
+    applyData: [],
+    finishData: []
   },
 
   onLoad: function (options) {
@@ -38,15 +39,15 @@ Page({
   // 跳转管理页
   toAdmin() {
     db.collection('verify').where({
-      openid:this.data.openid
+      openid: this.data.openid
     }).get().then(res => {
-      if(res.data[0] === undefined){
+      if (res.data[0] === undefined) {
         wx.showModal({
           cancelColor: 'cancelColor',
-          title:'温馨提示',
-          content:'你不是管理员!'
+          title: '温馨提示',
+          content: '你不是管理员!'
         })
-      }else{
+      } else {
         wx.navigateTo({
           url: '../admin/admin'
         })
@@ -59,21 +60,21 @@ Page({
   // 获取用户的openid
   getOpenid() {
     wx.cloud.callFunction({
-      name:'login'
+      name: 'login'
     }).then(res => {
       this.setData({
-        openid:res.result.openid
+        openid: res.result.openid
       })
     }).catch(err => {
       console.log(err)
     })
   },
 
-  // 获取申报数据
+  // 获取本月未处理的申报数据
   async getApplyData() {
     await db.collection('applyData').get().then(res => {
       this.setData({
-        applyData:res.data
+        applyData: res.data
       })
     }).catch(err => {
       console.log(err)
@@ -83,22 +84,24 @@ Page({
   // 获取本月已处理的申报数据
   async getCompleteData() {
     await db.collection('completeData').where({
-      month:app.globalData.obj_date.month
+      month: app.globalData.obj_date.month
     }).get().then(res => {
       this.setData({
-        finishData:res.data
+        finishData: res.data
       })
     }).catch(err => {
       console.log(err)
     })
   },
 
-  // 选择宿舍
+  // 宿舍选择函数
   onChooseDorm(event) {
-    const { value } = event.detail
-    if(value !== '全部宿舍'){
+    const {
+      value
+    } = event.detail
+    if (value !== '全部宿舍') {
       this.getApplyDataItem(value)
-    }else{
+    } else {
       this.getApplyData()
       this.getCompleteData()
     }
@@ -108,12 +111,12 @@ Page({
   async getApplyDataItem(value) {
     await db.collection('applyData').where({
       dorm: db.RegExp({
-        regexp:value,
-        options:'i'
+        regexp: value,
+        options: 'i'
       })
     }).get().then(res => {
       this.setData({
-        applyData:res.data
+        applyData: res.data
       })
     }).catch(err => {
       console.log(err)
@@ -121,12 +124,12 @@ Page({
 
     await db.collection('completeData').where({
       'complete.0.dorm': db.RegExp({
-        regexp:value,
-        options:'i'
+        regexp: value,
+        options: 'i'
       })
     }).get().then(res => {
       this.setData({
-        finishData:res.data
+        finishData: res.data
       })
     }).catch(err => {
       console.log(err)
@@ -136,48 +139,79 @@ Page({
 
   // 查看申报表
   navDetail(e) {
-    const { id } = e.currentTarget.dataset
+    const {
+      id
+    } = e.currentTarget.dataset
     wx.navigateTo({
-      url: '../detail/detail?id='+id
+      url: '../detail/detail?id=' + id
     })
   },
 
-  // 获取宿舍位置
+  // 设置宿舍栋数
   async getBuilding() {
     await db.collection('building').get().then(res => {
       const location = res.data[0].location
       this.setData({
-        columns:location
+        columns: location
       })
     }).catch(err => {
       console.log(err)
     })
   },
 
-  // 分享
+  // 获取分享数据
   async onShareMessage() {
     await db.collection('share').get().then(res => {
       this.setData({
-        shareData:res.data[0]
+        shareData: res.data[0]
       })
     })
   },
 
+  // 当前未处理触底事件
+  async toLowerGetApplyData() {
+    let res = await db.collection('applyData').skip(this.data.applyData.length).get()
+    this.setData({
+      applyData: [...this.data.applyData, ...res.data], //合并数据
+      isEndOfList: res.data.length < limit ? true : false //判断是否数据结束
+    })
+  },
+
+  // 本月已处理触底事件
+  async toLowerGetCompleteData() {
+    let res = await db.collection('completeData').where({
+      month: app.globalData.obj_date.month
+    }).skip(this.data.finishData.length).get()
+    this.setData({
+      finishData: [...this.data.finishData, ...res.data],
+      isCompleteData: res.data.length < limit ? true : false
+    })
+  },
+
+  // 调用scroll触底事件
+  toLower() {
+    !this.data.isEndOfList && this.toLowerGetApplyData()
+  },
+  toLowerComplete () {
+    !this.data.isCompleteData && this.toLowerGetCompleteData()
+  },
+
+  // 监听页面显示
   onShow: function () {
     this.getApplyData()
     this.getCompleteData()
   },
 
-  // 用户点击分享
+  // 监听用户点击分享
   onShareAppMessage: function () {
     return {
       title: this.data.shareData.title,
       path: this.data.shareData.path,
       imageUrl: this.data.shareData.imageUrl,
-      success: (res) => {
+      success: res => {
         console.log(res)
       },
-      fail: (err) => {
+      fail: err => {
         console.log(err)
       }
     }

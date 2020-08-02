@@ -8,16 +8,20 @@ Page({
   },
 
   onLoad: function (options) {
-    const { dorm,submit,openid} = options
+    const {
+      dorm,
+      submit,
+      openid
+    } = options
     this.setData({
       dorm
     })
-    if(openid){
+    if (openid) {
       this.setData({
         openid
       })
     }
-    if(submit){
+    if (submit) {
       this.setData({
         submit
       })
@@ -28,10 +32,10 @@ Page({
   // 获取模板消息
   async getTemplateMessage() {
     await db.collection('templateMessage').get().then(res => {
-     this.setData({
-       template1:res.data[0],
-       template2:res.data[1]
-     })
+      this.setData({
+        template1: res.data[0],
+        template2: res.data[1]
+      })
     }).catch(err => {
       console.log(err)
     })
@@ -44,15 +48,15 @@ Page({
     })
     wx.requestSubscribeMessage({
       tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
-      success:(res) => {
+      success: (res) => {
         wx.cloud.callFunction({
-          name:'templateMessage',
-          data:{
-            dorm:this.data.dorm,
-            name:this.data.template1.name,
-            phone:this.data.template1.phone,
-            status:this.data.template1.status,
-            other:this.data.template1.other
+          name: 'templateMessage',
+          data: {
+            dorm: this.data.dorm,
+            name: this.data.template1.name,
+            phone: this.data.template1.phone,
+            status: this.data.template1.status,
+            other: this.data.template1.other
           }
         }).then(res => {
           wx.hideLoading()
@@ -66,23 +70,23 @@ Page({
     })
   },
 
-  // 发送通知
+  // 发送服务通知
   sendNotice() {
     wx.showLoading({
       title: '正在发送...'
     })
     wx.requestSubscribeMessage({
       tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
-      success:(res) => {
+      success: (res) => {
         wx.cloud.callFunction({
-          name:'templateMessage',
-          data:{
-            dorm:this.data.dorm,
-            name:this.data.template2.name,
-            phone:this.data.template2.phone,
-            status:this.data.template2.status,
-            other:this.data.template2.other,
-            openid:this.data.openid
+          name: 'templateMessage',
+          data: {
+            dorm: this.data.dorm,
+            name: this.data.template2.name,
+            phone: this.data.template2.phone,
+            status: this.data.template2.status,
+            other: this.data.template2.other,
+            openid: this.data.openid
           }
         }).then(res => {
           wx.hideLoading()

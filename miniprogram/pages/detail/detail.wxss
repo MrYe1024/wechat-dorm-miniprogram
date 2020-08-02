@@ -1,30 +1,36 @@
-page{
+page {
   background-color: #fff;
 }
-.apply-table{
+
+.apply-table {
   background-color: #fbf7ed;
   margin: 20px 10px 0px 10px;
   border-radius: 5px;
   padding: 20px 0;
 }
-.apply-icon{
+
+.apply-icon {
   position: absolute;
   left: 500rpx;
 }
-.apply-title{
+
+.apply-title {
   font-size: 2em;
   text-align: center;
 }
-.apply-item{
+
+.apply-item {
   background-color: #fff;
   height: 46px;
   margin: 10px;
   padding: 10px;
 }
-.apply-item-title{
+
+.apply-item-title {
   font-size: 18px;
 }
-.item{
+
+.item {
   padding-top: 2px;
   color: #e74c3c;
 }

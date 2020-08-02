@@ -1,6 +1,7 @@
 const app = getApp()
 const db = wx.cloud.database()
 const _ = db.command
+const limit = 20
 
 Page({
 
@@ -34,7 +35,7 @@ Page({
     }
   },
 
-  // 获取宿舍位置
+  // 设置宿舍栋数
   async getBuilding() {
     await db.collection('building').get().then(res => {
       const location = res.data[0].location
@@ -147,6 +148,20 @@ Page({
     }).catch(err => {
       console.log(err)
     })
+  },
+
+  // 当前未处理触底事件
+  async toLowerGetApplyData () {
+    let res = await db.collection('applyData').skip(this.data.applyData.length).get()
+    this.setData({
+      applyData: [...this.data.applyData, ...res.data],
+      isEndOfList: res.data.length < limit ? true : false
+    })
+  },
+
+  // 调用scroll触底事件
+  toLower() {
+    !this.data.isEndOfList && this.toLowerGetApplyData()
   },
 
   onShow: function () {
