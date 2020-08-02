@@ -15,7 +15,7 @@
 | login  | 获取用户openid  |
 | templateMessage  | 发送模板消息  |
 
-## 静态文件/miniprogram
+## 静态文件/miniprogram/
 | 名称 | 说明 |
 |------|------------|
 | utils  | 图标url接口  |
