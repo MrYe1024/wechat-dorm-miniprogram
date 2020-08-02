@@ -1,0 +1,34 @@
+<view class='apply-icon'>
+  <image src='/images/bi.png' style='width:80px;height:80px;'></image>
+</view>
+<view class='apply-table'>
+  <view class='apply-title'>申报表</view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报人：</view>
+    <view class="item">{{data[0].name}}</view>
+  </view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报宿舍：</view>
+    <view class="item">{{data[0].dorm}}</view>
+  </view>
+  <view class="apply-item" wx:if="{{admin}}">
+    <view class="apply-item-title">联系电话：</view>
+    <view class="item">{{data[0].phone}}</view>
+  </view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报描述：</view>
+    <view class="item">{{data[0].detail}}</view>
+  </view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报级别：</view>
+    <view class="item">{{data[0].tag}}</view>
+  </view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报状态：</view>
+    <view class="item">{{data[0].status}}</view>
+  </view>
+  <view class="apply-item">
+    <view class="apply-item-title">申报日期：</view>
+    <view class="item">{{data[0].date}} {{data[0].week}}</view>
+  </view>
+</view>

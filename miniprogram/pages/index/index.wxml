@@ -1,0 +1,67 @@
+<!-- 导航 -->
+<view class="nav-container">
+  <view class="nav">
+    <button class="nav-left-title" hover-class="hover-btn"  bindtap="toPublish">报修申报</button>
+    <button class="nav-right-title" hover-class="hover-btn" bindtap="toAdmin">宿舍管理员</button>
+  </view>
+</view>
+
+<!-- 宿舍选择 -->
+<view>
+  <van-picker 
+    columns="{{ columns }}" 
+    bind:change="onChooseDorm" 
+    visible-item-count="3"
+  />
+</view>
+
+<!-- 申报列表 -->
+<view class="apply-list">
+  <van-tabs swipeable>
+    <van-tab title="当前未处理">
+    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px">
+    <block wx:for="{{applyData}}" wx:key="applyData">
+      <view class="apply-item">
+        <van-card
+          title="{{item.dorm}}"
+          desc="{{item.detail}}"
+          tag="{{item.tag}}"
+          thumb="{{item.icon_url}}"
+        >
+        <view slot="tags">
+          <van-tag color="#DC143C">{{item.status}}</van-tag>
+          <view class="apply-date">
+            <text>{{item.date}} {{item.week}}</text>
+          </view>
+        </view>
+        <view slot="footer">
+          <van-button size="mini" type="primary" plain data-id="{{item._id}}" bindtap="navDetail">查看详情</van-button>
+        </view>
+        </van-card>
+      </view>
+    </block>
+    </scroll-view>
+    </van-tab>
+    <van-tab title="本月已处理">
+    <scroll-view scroll-y="true" style="height:{{scrollHeight}}px">
+    <block wx:for="{{finishData}}" wx:key="finishData">
+      <view class="apply-item">
+        <van-card
+          title="{{item.complete[0].dorm}}"
+          desc="{{item.complete[0].detail}}"
+          tag="{{item.complete[0].tag}}"
+          thumb="{{item.complete[0].icon_url}}"
+        >
+        <view slot="tags">
+          <van-tag color="#00FF00">{{item.status}}</van-tag>
+          <view class="apply-date">
+            <text>{{item.date}} {{item.week}}</text>
+          </view>
+        </view>
+        </van-card>
+      </view>
+    </block>
+    </scroll-view>
+    </van-tab>
+  </van-tabs>
+</view>

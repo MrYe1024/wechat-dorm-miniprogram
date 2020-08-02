@@ -1,0 +1,10 @@
+<view class="success-icon-view">
+  <image class="success-icon" src="../../images/success.png"></image>
+  <view wx:if="{{submit}}" class="success-title">提交成功</view>
+  <view wx:else class="success-title">维修完成</view>
+</view>
+
+<view class="back-home-btn">
+  <button wx:if="{{submit}}" type="primary" bindtap="backHome">返回首页</button>
+  <button wx:else type="primary" bindtap="sendNotice">发送通知</button>
+</view>

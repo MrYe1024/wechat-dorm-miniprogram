@@ -1,0 +1,10 @@
+/* 申报列表 */
+.apply-item{
+  border-bottom: 1rpx solid #ecf0f1;
+}
+.apply-date{
+  margin-top: 5px;
+}
+.footer-btn{
+  margin-left: 5px;
+}

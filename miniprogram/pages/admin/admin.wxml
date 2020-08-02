@@ -1,0 +1,39 @@
+<!-- 宿舍选择 -->
+<view>
+  <van-picker 
+    columns="{{ columns }}" 
+    bind:change="onChooseDorm" 
+    visible-item-count="3"
+/>
+</view>
+
+<!-- 标签页 -->
+<view class="apply-list">
+  <van-tabs swipeable>
+    <van-tab title="当前未处理">
+      <scroll-view scroll-y="true" style="height:{{scrollHeight}}px">
+      <block wx:for="{{applyData}}" wx:key="applyData">
+      <view class="apply-item">
+        <van-card
+          title="{{item.dorm}}"
+          desc="{{item.detail}}"
+          tag="{{item.tag}}"
+          thumb="{{item.icon_url}}"
+        >
+        <view slot="tags">
+          <van-tag color="#DC143C">{{item.status}}</van-tag>
+          <view class="apply-date">
+            <text>{{item.date}} {{item.week}}</text>
+          </view>
+        </view>
+        <view slot="footer">
+          <van-button size="mini" type="primary" plain data-id="{{item._id}}" data-admin="true" bindtap="navDetail">查看详情</van-button>
+          <van-button class="footer-btn" size="mini" type="warning" plain data-id="{{item._id}}" data-dorm="{{item.dorm}}" data-openid="{{item._openid}}" bindtap="deleteApplyData">确认处理</van-button>
+        </view>
+        </van-card>
+      </view>
+    </block>
+    </scroll-view>
+    </van-tab>
+  </van-tabs>
+</view>

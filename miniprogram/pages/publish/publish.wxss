@@ -1,0 +1,78 @@
+page{
+  font-size: 16px;
+  font-weight: 200;
+}
+/* 通告栏 */
+.notice-container{
+  margin-bottom: 10px;
+}
+/* 申报项 */
+.apply-item{
+  width: 100%;
+  height: 44px;
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
+.in-1,.in-4{
+  width: 120px;
+  background-color: #ecf0f1;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: #3498db;
+}
+.in-2,.in-3{
+  width: 60px;
+  background-color: #ecf0f1;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  color: #3498db;
+}
+.in-5{
+  width: 100%;
+  background-color: #ecf0f1;
+  padding: 10px 5px;
+  border-radius: 5px;
+  color: #3498db;
+  height: 60px;
+}
+.apply-desc{
+  height: 110px;
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.apply-desc-textarea{
+  margin: 10px 10px 10px 0;
+}
+/* 申报分类 */
+.status-ordinary,.status-pressing{
+  width: 100%;
+  height: 44px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid #f6f6f6;
+}
+.status-title{
+  flex: 0 0 80%;
+  padding-left: 10px;
+}
+.status-radio{
+  display: flex;
+  flex: 0 0 20%;
+  justify-content: center;
+}
+/* 提交按钮 */
+.apply-btn{
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 20px;
+}

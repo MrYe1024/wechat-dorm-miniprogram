@@ -1,0 +1,30 @@
+page{
+  background-color: #fff;
+}
+.apply-table{
+  background-color: #fbf7ed;
+  margin: 20px 10px 0px 10px;
+  border-radius: 5px;
+  padding: 20px 0;
+}
+.apply-icon{
+  position: absolute;
+  left: 500rpx;
+}
+.apply-title{
+  font-size: 2em;
+  text-align: center;
+}
+.apply-item{
+  background-color: #fff;
+  height: 46px;
+  margin: 10px;
+  padding: 10px;
+}
+.apply-item-title{
+  font-size: 18px;
+}
+.item{
+  padding-top: 2px;
+  color: #e74c3c;
+}
