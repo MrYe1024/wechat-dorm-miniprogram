@@ -1,12 +1,7 @@
 {
   "usingComponents": {
-    "van-nav-bar": "@vant/weapp/nav-bar/index",
     "van-picker": "@vant/weapp/picker/index",
-    "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index",
-    "van-card": "@vant/weapp/card/index",
-    "van-tag": "@vant/weapp/tag/index",
-    "van-button": "@vant/weapp/button/index",
-    "van-notify": "@vant/weapp/notify/index"
+    "ye-tab": "../../components/tab/tab",
+    "van-tag": "@vant/weapp/tag/index"
   }
 }

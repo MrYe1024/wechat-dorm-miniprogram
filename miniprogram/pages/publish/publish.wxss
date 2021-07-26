@@ -1,92 +1,62 @@
-page {
-  font-size: 16px;
-  font-weight: 200;
-}
-
-/* 通告栏 */
 .notice-container {
-  margin-bottom: 10px;
+  margin-bottom: 20rpx;
 }
 
-/* 申报项 */
+input, textarea {
+  background-color: #f6f6f6;
+  padding: 10rpx;
+  color: var(--color-text-second);
+}
+
 .apply-item {
-  width: 100%;
-  height: 44px;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
   display: flex;
-  background-color: #fff;
   align-items: center;
-  padding-left: 10px;
-  margin-bottom: 10px;
+  background-color: var(--color-white);
 }
 
 .in-1,
 .in-4 {
-  width: 120px;
-  background-color: #ecf0f1;
-  margin: 10px;
-  padding: 5px;
-  border-radius: 5px;
+  width: 250rpx;
+  border-radius: 10rpx;
   text-align: center;
-  color: #3498db;
+}
+
+.text-dorm {
+  margin: 0 20rpx;
 }
 
 .in-2,
 .in-3 {
-  width: 60px;
-  background-color: #ecf0f1;
-  margin: 10px;
-  padding: 5px;
-  border-radius: 5px;
+  width: 120rpx;
+  border-radius: 10rpx;
   text-align: center;
-  color: #3498db;
-}
-
-.in-5 {
-  width: 100%;
-  background-color: #ecf0f1;
-  padding: 10px 5px;
-  border-radius: 5px;
-  color: #3498db;
-  height: 60px;
 }
 
 .apply-desc {
-  height: 110px;
-  background-color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: var(--color-white);
 }
 
-.apply-desc-textarea {
-  margin: 10px 10px 10px 0;
+.apply-desc>text {
+  margin-bottom: 20rpx;
 }
 
-/* 申报分类 */
-.status-ordinary,
-.status-pressing {
+.in-5 {
+  border-radius: 10rpx;
+  height: 150rpx;
   width: 100%;
-  height: 44px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  border-bottom: 1rpx solid #f6f6f6;
 }
 
-.status-title {
-  flex: 0 0 80%;
-  padding-left: 10px;
-}
-
-.status-radio {
-  display: flex;
-  flex: 0 0 20%;
-  justify-content: center;
-}
-
-/* 提交按钮 */
 .apply-btn {
+  width: 80%;
+  margin: 100rpx auto 0 auto;
+}
+
+.ad-banner {
+  margin-top: 100rpx;
   width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 20px;
 }

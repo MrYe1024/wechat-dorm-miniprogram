@@ -1,135 +1,174 @@
-const app = getApp()
 import {
-  icon_url
-} from '../../utils/api.js'
-const db = wx.cloud.database()
-const _ = db.command
+  icon
+} from '../../config/config.default';
+import { moment } from '../../utils/moment';
+const db = wx.cloud.database();
 
 Page({
 
   data: {
-    radio: '普通维修',
-    icon: icon_url.ordinary_icon
+    level: '普通维修',
+    levelIcon: icon.ordinary,
+    pickerList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
   },
 
-  onLoad: function (options) {
-
+  onLoad: function() {
+    
   },
 
-  // 状态选择
-  statusChoose(e) {
-    if (e.detail === '紧急维修') {
-      this.setData({
-        icon: icon_url.press_icon
-      })
-    } else {
-      this.setData({
-        icon: icon_url.ordinary_icon
-      })
-    }
+  /* 申报人 */
+  setName(e) {
     this.setData({
-      radio: e.detail
+      name: e.detail.value
     })
   },
 
-  // 填写申报表单
-  getName(e) {
+  /* 选择栋数 */
+  selectFloor(e) {
     this.setData({
-      name: e.detail.value.trim()
+      floor: this.data.pickerList[Number(e.detail.value)]
     })
   },
 
-  getBuilding(e) {
+  /* 设置宿舍 */
+  setDormNum(e) {
     this.setData({
-      building: e.detail.value.replace(/\b(0+)/gi, "")
+      dorm: e.detail.value
     })
   },
 
-  getDormNum(e) {
-    this.setData({
-      dormNum: e.detail.value.replace(/\b(0+)/gi, "")
-    })
-  },
-
-  getPhone(e) {
+  /* 联系电话 */
+  setPhone(e) {
     this.setData({
       phone: e.detail.value
     })
   },
 
-  getDetail(e) {
+  /* 申报描述 */
+  setDesc(e) {
     this.setData({
-      detail: e.detail.value
+      desc: e.detail.value
     })
   },
 
-  // 提交申报表
+  /* 选择维修级别 */
+  selectLevel(e) {
+    if (e.detail === '紧急维修') {
+      this.setData({
+        levelIcon: icon.press
+      })
+    } else {
+      this.setData({
+        levelIcon: icon.ordinary
+      })
+    }
+    this.setData({
+      level: e.detail
+    })
+  },
+
+  clickLevel(e) {
+    if (e.currentTarget.dataset.level === '紧急维修') {
+      this.setData({
+        levelIcon: icon.press
+      })
+    } else {
+      this.setData({
+        levelIcon: icon.ordinary
+      })
+    }
+    this.setData({
+      level: e.currentTarget.dataset.level
+    })
+  },
+
+  /* 提交申报表 */
   inApplyData() {
-    this.verifyData((verify) => {
-      if (verify) {
-        db.collection('applyData').add({
-          data: {
-            name: this.data.name,
-            dorm: this.data.building + '栋' + this.data.dormNum,
-            phone: this.data.phone,
-            detail: this.data.detail,
-            tag: this.data.radio,
-            status: '未处理',
-            icon_url: this.data.icon,
-            week: app.globalData.week,
-            date: app.globalData.obj_date.date,
-            month: app.globalData.obj_date.month
-          }
-        }).then(res => {
-          wx.showToast({
-            title: '提交成功',
-            icon: 'success',
-            duration: 1000,
-            success: () => {
-              let dorm = this.data.building + '栋' + this.data.dormNum
-              wx.navigateTo({
-                url: '../success/success?dorm=' + dorm + '&submit'
-              })
-            }
-          })
-        }).catch(err => {
-          console.log(err)
+    wx.requestSubscribeMessage({
+      tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
+    })
+    if (this.validate()) {
+      wx.showLoading({
+        title: '正在提交...',
+        mask: true
+      })
+      db.collection('c_apply').add({
+        data: {
+          name: this.data.name.trim(),
+          floor: this.data.floor,
+          dorm: this.data.dorm,
+          phone: this.data.phone,
+          desc: this.data.desc.trim(),
+          level: this.data.level,
+          levelIcon: this.data.levelIcon,
+          status: '未处理',
+          createTime: moment('YYYY-MM-DD hh:mm:ss'),
+        }
+      }).then(res => {
+        wx.hideLoading();
+        wx.showToast({
+          title: '提交成功',
+          duration: 1000
         })
+        this.sendApplyNotice();
+        wx.reLaunch({
+          url: '../index/index?id=success',
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  },
+
+  /* 发送报修订单提醒 */
+  sendApplyNotice() {
+    wx.cloud.callFunction({
+      name: 'applyNotice',
+      data: {
+        name: this.data.name,
+        dorm: this.data.floor + '栋' + this.data.dorm,
+        desc: this.data.desc.substr(0, 16) + '...',
+        phone: this.data.phone,
+        createTime: moment('YYYY-MM-DD hh:mm:ss'),
+        templateId: '4Lnbo47VBu7woS0m0O8UjZ-7TBozETC4Mr5tdkwJ4v4',
+        openid: wx.getStorageSync('admin').openid
       }
+    }).then(res => {
+      console.log(res);
     })
   },
 
-  // 申报表验证
-  verifyData(callback) {
-    let cp = /[1][3,4,5,7,8][0-9]{9}$/
-    if (this.data.name === '' || this.data.name === undefined) {
+  /* 申报表单验证 */
+  validate() {
+    let cp = /[1][3,4,5,7,8][0-9]{9}$/;
+    if (this.data.name === '' || !this.data.name) {
       wx.showToast({
-        title: '请填写姓名',
-        icon: 'loading',
+        title: '请填写申报人',
+        icon: 'error',
         duration: 500
       })
       return false;
     }
-    if (this.data.building === '' || this.data.building === undefined) {
+    if (this.data.floor === '' || !this.data.floor) {
       wx.showToast({
-        title: '请填写栋数',
-        icon: 'loading',
+        title: '请选择栋数',
+        icon: 'error',
         duration: 500
       })
       return false;
     }
-    if (this.data.dormNum === '' || this.data.dormNum === undefined) {
+    if (this.data.dorm === '' || !this.data.dorm) {
       wx.showToast({
-        title: '请填写宿舍号',
-        icon: 'loading',
+        title: '请填写宿舍',
+        icon: 'error',
         duration: 500
       })
       return false;
     }
-    if (this.data.phone === '' || this.data.phone === undefined) {
+    if (this.data.phone === '' || !this.data.phone) {
       wx.showToast({
-        title: '请填写手机',
-        icon: 'loading',
+        title: '请填写手机号码',
+        icon: 'error',
         duration: 500
       })
       return false;
@@ -137,20 +176,20 @@ Page({
     if (!cp.test(this.data.phone)) {
       wx.showToast({
         title: '请填写正确手机号',
-        icon: 'loading',
+        icon: 'error',
         duration: 500
       })
       return false;
     }
-    if (this.data.detail === '' || this.data.detail === undefined) {
+    if (this.data.desc === '' || !this.data.desc) {
       wx.showToast({
         title: '请说明情况',
-        icon: 'loading',
+        icon: 'error',
         duration: 500
       })
       return false;
     }
-    callback(true)
+    return true;
   }
 
 })

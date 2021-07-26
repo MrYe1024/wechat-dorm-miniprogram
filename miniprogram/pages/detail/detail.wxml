@@ -1,34 +1,40 @@
-<view class='apply-icon'>
-	<image src='/images/bi.png' style='width:80px;height:80px;'></image>
-</view>
 <view class='apply-table'>
 	<view class='apply-title'>申报表</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报人：</view>
-		<view class="item">{{data[0].name}}</view>
+		<view class="item-content">{{data.name}}</view>
 	</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报宿舍：</view>
-		<view class="item">{{data[0].dorm}}</view>
+		<view class="item-content">{{data.floor}}栋{{data.dorm}}</view>
 	</view>
 	<view class="apply-item" wx:if="{{admin}}">
 		<view class="apply-item-title">联系电话：</view>
-		<view class="item">{{data[0].phone}}</view>
+		<view class="item-content">{{data.phone}}</view>
+		<view class="contact-phone-footer">
+			<text data-phone="{{data.phone}}" bindtap="callApplyPhone">一键联系</text>
+			<text data-phone="{{data.phone}}" bindtap="copyApplyPhone">一键复制</text>
+		</view>
 	</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报描述：</view>
-		<view class="item">{{data[0].detail}}</view>
+		<view class="item-content">{{data.desc}}</view>
 	</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报级别：</view>
-		<view class="item">{{data[0].tag}}</view>
+		<view class="item-content">{{data.level}}</view>
 	</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报状态：</view>
-		<view class="item">{{data[0].status}}</view>
+		<view class="item-content">{{data.status}}</view>
 	</view>
 	<view class="apply-item">
 		<view class="apply-item-title">申报日期：</view>
-		<view class="item">{{data[0].date}} {{data[0].week}}</view>
+		<view class="item-content">{{data.createTime}}</view>
 	</view>
+	<image src='/images/bi.png' class="header-icon"></image>
+</view>
+
+<view class="ad-banner">
+	<ad unit-id="adunit-0280bbad84c78062"></ad>
 </view>

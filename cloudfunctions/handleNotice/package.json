@@ -1,5 +1,5 @@
 {
-  "name": "templateMessage",
+  "name": "handleNotice",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wx-js-utils": "^1.0.0",
-    "wx-server-sdk": "~2.0.4"
+    "wx-server-sdk": "~2.5.3"
   }
 }

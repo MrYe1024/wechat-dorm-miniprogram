@@ -1,53 +1,53 @@
 <!-- 通告栏 -->
 <view class="notice-container">
-	<van-notice-bar left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" text="请同学们如实填写信息,方便维修人员对应进行维修。请同学们推广使用,谢谢大家。" speed="40" />
+	<van-notice-bar left-icon="https://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png"
+		text="请同学们如实填写信息,方便维修人员对应进行维修。请同学们推广使用,谢谢大家。" speed="40" />
 </view>
 
 <!-- 申报项 -->
 <view class="apply-item">
 	<text>申报人：</text>
-	<input class="in-1" maxlength="5" bindinput="getName"></input>
+	<input class="in-1" maxlength="5" bindinput="setName"></input>
 </view>
 
 <view class="apply-item">
 	<text>申报宿舍：</text>
-	<input class="in-2" type="number" maxlength="2" minlength="1" bindinput="getBuilding"></input>
-	<text>栋</text>
-	<input class="in-3" type="number" maxlength="4" minlength="3" bindinput="getDormNum"></input>
+	<picker bindchange="selectFloor" range="{{pickerList}}">
+		<view class="picker">
+			<input class="in-2" type="number" value="{{floor}}"></input>
+		</view>
+	</picker>
+	<text class="text-dorm">栋</text>
+	<input class="in-3" type="number" maxlength="6" bindinput="setDormNum"></input>
 </view>
 
 <view class="apply-item">
 	<text>联系电话：</text>
-	<input class="in-4" type="number" maxlength="11" minlength="11" bindinput="getPhone"></input>
+	<input class="in-4" type="number" bindinput="setPhone"></input>
 </view>
 
-<view class="apply-desc">
-	<text >申报描述：</text>
-	<view class="apply-desc-textarea">
-		<textarea class="in-5" placeholder="说明损坏情况" placeholder-style="color:#ccc;font-size:14px;" type="string" maxlength="40" minlength="3" bindinput="getDetail"></textarea>
-	</view>
+<view class="apply-item apply-desc">
+	<text>申报描述：</text>
+	<textarea class="in-5" placeholder="请说明要维修的情况" placeholder-style="color:#ccc;font-size:14px;" type="string"
+		maxlength="50" bindinput="setDesc"></textarea>
 </view>
-<!-- 申报分类 -->
-<view class="status-container">
-	<view class="status-ordinary">
-		<view class="status-title">普通维修</view>
-		<view class="status-radio">
-			<van-radio-group value="{{ radio }}" bind:change="statusChoose">
-				<van-radio name="普通维修"></van-radio>
-			</van-radio-group>
-		</view>
-	</view>
-	<view class="status-pressing">
-		<view class="status-title">紧急维修</view>
-		<view class="status-radio">
-			<van-radio-group value="{{ radio }}" bind:change="statusChoose">
-				<van-radio name="紧急维修"></van-radio>
-			</van-radio-group>
-		</view>
-	</view>
-</view>
+
+<van-radio-group value="{{ level }}" bind:change="selectLevel">
+  <van-cell-group border="{{false}}">
+    <van-cell title="普通维修" clickable data-level="普通维修" bind:click="clickLevel" border="{{false}}">
+      <van-radio slot="right-icon" name="普通维修" />
+    </van-cell>
+    <van-cell title="紧急维修" clickable data-level="紧急维修" bind:click="clickLevel" border="{{false}}">
+      <van-radio slot="right-icon" name="紧急维修" />
+    </van-cell>
+  </van-cell-group>
+</van-radio-group>
 
 <!-- 提交申报 -->
 <view class="apply-btn">
 	<button type="primary" bindtap="inApplyData">提交</button>
+</view>
+
+<view class="ad-banner">
+	<ad unit-id="adunit-0280bbad84c78062"></ad>
 </view>

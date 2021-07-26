@@ -1,39 +1,40 @@
-## 页面说明/miniprogram/pages
-| 页面 | 名称 | 说明 |
-|------|------------|------------|
-| index  | 首页  |显示当前未处理，本月已处理的宿舍申报数据|
-| detail | 详情页|显示申报表                            |
-| publish| 提交页|提交申报数据                          |
-| admin  | 管理页|管理申报表                           |
-| success| 提示页|成功页面提示，包含服务通知功能             |
+# 宿舍报修助手
 
-## 云函数/cloudfunctions
-| 名称 | 说明 |
-|------|------------|
-| db_delete  | 删除申报数据  |
-| login  | 获取用户openid  |
-| templateMessage  | 发送模板消息  |
+## 项目说明
 
-## 静态文件/miniprogram
-| 名称 | 说明 |
-|------|------------|
-| utils  | 图标url接口  |
-| miniprogram_npm  | vant小程序组件库文件  |
-| images  | 图片  |
+本项目基于小程序云开发，简单易用，逻辑主要是云数据库的增删查改，页面大部分自写，部分使用vant weapp小程序组件库。大家可用于学习或者二次开发，有什么不懂的地方可联系wechat：MrYe1024。对了，项目里面插了点广告，不介意的话帮我点下，生活不易阿！！！！！！
 
-## 数据库文件
-| 集合名称 | 说明 |
-|------|------------|
-| applyData  | 申报当前未处理记录  |
-| completeData  | 申报本月已处理记录  |
-| building  | 宿舍楼栋数记录  |
-| templateMessage  | 模板信息记录  |
-| verify  | 管理员openid验证记录  |
-| share  | 分享信息记录  |
+## 项目部署流程
 
-# 项目部署流程
-> 前提条件，注册了小程序，开通了云开发
+### 步骤一：安装依赖
 
-## 步骤一：导入源码
+在miniprogram目录下npm install，安装vant weapp包。
 
-## 步骤二：导入数据库
+```bash
+D:\小程序项目\dorm-partner\miniprogram>npm install
+```
+
+### 步骤二：修改云环境与上传云函数
+
+1.导入源码后，打开app.js文件，找到如下代码修改云环境。
+
+```
+wx.cloud.init({
+   env: '云环境ID', // 打开云控制台可获取
+   traceUser: true
+})
+```
+
+2.上传cloudfunctions目录下的云函数，login，applyNotice, handleNotice。注意上传时选择（上传并部署，不上传node_modules）。
+
+### 步骤三：导入数据库
+
+ 打开云开发控制台，创建c_apply，c_role，c_share集合，然后找到源码databases目录下的数据库文件，分别导入。
+
+### 步骤四：添加权限
+
+一，二，三步骤完成之后，编译程序，控制台会输出你的openid。复制你的opneid，打开云控制台c_role集合，找到openid字段替换为你的opneid。
+
+## 项目体验
+
+![]()
