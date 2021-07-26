@@ -87,9 +87,12 @@ Page({
     } = e.detail;
     floorIndex = index;
     if (index === 0) {
+      this.setData({
+        applyData: []
+      })
       this.getApplyData();
     } else {
-      this.getApplyDataItem(index);
+      this.getApplyDataItem(floorIndex);
     }
   },
 

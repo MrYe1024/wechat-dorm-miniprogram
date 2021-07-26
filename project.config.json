@@ -75,20 +75,6 @@
         },
         {
           "id": -1,
-          "name": "test",
-          "pathName": "pages/test/test",
-          "query": "",
-          "scene": null
-        },
-        {
-          "id": 4,
-          "name": "success",
-          "pathName": "pages/success/success",
-          "query": "",
-          "scene": null
-        },
-        {
-          "id": -1,
           "name": "admin",
           "pathName": "pages/admin/admin",
           "query": "",
