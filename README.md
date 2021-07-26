@@ -6,15 +6,7 @@
 
 ## 项目部署流程
 
-### 步骤一：安装依赖
-
-在miniprogram目录下npm install，安装vant weapp包，源码有的话，无需安装。
-
-```bash
-D:\小程序项目\dorm-partner\miniprogram>npm install
-```
-
-### 步骤二：修改云环境与上传云函数
+### 步骤一：修改云环境与上传云函数
 
 1.导入源码后，打开app.js文件，找到如下代码修改云环境。
 
@@ -27,13 +19,13 @@ wx.cloud.init({
 
 2.上传cloudfunctions目录下的云函数，login，applyNotice, handleNotice。注意上传时选择（上传并部署，不上传node_modules）。
 
-### 步骤三：导入数据库
+### 步骤二：导入数据库
 
  打开云开发控制台，创建c_apply，c_role，c_share集合，然后找到源码databases目录下的数据库文件，分别导入。
 
-### 步骤四：添加权限
+### 步骤三：添加权限
 
-一，二，三步骤完成之后，编译程序，控制台会输出你的openid。复制你的openid，打开云控制台c_role集合，找到openid字段替换为你的openid。
+一，二步骤完成之后，编译程序，控制台会输出你的openid。复制你的openid，打开云控制台c_role集合，找到openid字段替换为你的openid。
 
 ## 项目体验
 
