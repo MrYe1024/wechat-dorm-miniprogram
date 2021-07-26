@@ -8,7 +8,7 @@
 
 ### 步骤一：安装依赖
 
-在miniprogram目录下npm install，安装vant weapp包。
+在miniprogram目录下npm install，安装vant weapp包，源码有的话，无需安装。
 
 ```bash
 D:\小程序项目\dorm-partner\miniprogram>npm install
@@ -33,7 +33,7 @@ wx.cloud.init({
 
 ### 步骤四：添加权限
 
-一，二，三步骤完成之后，编译程序，控制台会输出你的openid。复制你的opneid，打开云控制台c_role集合，找到openid字段替换为你的opneid。
+一，二，三步骤完成之后，编译程序，控制台会输出你的openid。复制你的openid，打开云控制台c_role集合，找到openid字段替换为你的openid。
 
 ## 项目体验
 
