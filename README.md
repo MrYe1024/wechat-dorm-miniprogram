@@ -1,0 +1,9 @@
+## 初始化项目
+npm install
+## 项目结构
+- 组件库使用uView1.x版本
+- service请求封装
+- common公共方法
+- components自定义组件
+- 全局时间格式化moment.js
+- store状态管理

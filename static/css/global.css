@@ -1,0 +1,68 @@
+/* 单行文本溢出显示省略号 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 2行文本溢出显示省略号 */
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 3行文本溢出显示省略号 */
+.ellipsis-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* 下边框 */
+.border-bottom::after {
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  border-bottom: 1rpx solid #e4e7ed;
+  transform: scale(.5, .5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.border-full::after {
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  border: 1rpx solid #e4e7ed;
+  transform: scale(.5, .5);
+  transform-origin: 0 0;
+  pointer-events: none;
+  border-radius: 20rpx;
+}
+
+/* 格式化原生button */
+.format-button {
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  line-height: inherit;
+  border-radius: 0 !important;
+  margin: 0;
+  padding: 0;
+  font-size: 28rpx;
+}
+
+.format-button::after {
+  border: none !important;
+}
