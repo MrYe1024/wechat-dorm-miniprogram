@@ -3,14 +3,7 @@ import App from './App'
 // #ifndef VUE3
 import Vue from 'vue'
 import store from './store'
-import uView from "uview-ui"
-import moment from 'moment'
-
-// 定义全局时间戳过滤器
-Vue.prototype.$moment = moment
-moment.locale('zh-cn')
-Vue.filter('formatDate', (str, defaultStr = 'YYYY-MM-DD') => moment(str).format(defaultStr))
-Vue.filter('fromNow', (dateStr, defaultFormat = 'YYYY-MM-DD HH:mm:ss') => moment(dateStr).fromNow())
+import uView from '@/uni_modules/uview-ui'
 
 Vue.use(uView)
 Vue.config.productionTip = false

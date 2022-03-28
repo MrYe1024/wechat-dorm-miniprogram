@@ -6,7 +6,7 @@ const httpRequest = (host, path, method, params) => {
 			data: params,
 			header: {
 				"content-type": "application/json",
-				"Authorization": 'Bearer '+uni.getStorageSync('userInfo').token,
+				"Authorization": uni.getStorageSync('token'),
 			},
 			success: (res) => {
 				resolve(res);

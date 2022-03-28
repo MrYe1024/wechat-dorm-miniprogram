@@ -12,8 +12,9 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	/*每个页面公共css */
-	@import "static/css/reset.css";
-	@import "static/css/global.css";
+	@import "@/uni_modules/uview-ui/index.scss";
+	@import  "static/css/reset.css";
+	@import  "static/css/global.css";
 </style>

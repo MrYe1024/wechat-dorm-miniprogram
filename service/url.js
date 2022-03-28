@@ -1,4 +1,8 @@
-const host = "http://192.168.0.9:3000"
+var host = ''
+if (process.env.NODE_ENV === 'development') {
+	host = ''
+}else {
+	host = ''
+}
 
 export { host };
-
