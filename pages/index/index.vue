@@ -12,7 +12,7 @@
 			}
 		},
 		onLoad() {
-
+			
 		},
 		methods: {
 
