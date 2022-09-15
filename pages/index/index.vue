@@ -1,6 +1,6 @@
 <template>
-	<view class="content">
-		<u-button type="primary" text="确定"></u-button>
+	<view class="container">
+		<text>{{title}}</text>
 	</view>
 </template>
 
@@ -20,6 +20,11 @@
 	}
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
 </style>

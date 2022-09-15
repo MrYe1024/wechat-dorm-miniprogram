@@ -4,10 +4,8 @@ import App from './App'
 import Vue from 'vue'
 import store from './store'
 import { http } from '@/service/index.js'
-import uView from '@/uni_modules/uview-ui'
 
 Vue.prototype.$http = http
-Vue.use(uView)
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
