@@ -8,6 +8,13 @@ npm install
 - store状态管理
 - service请求封装
 - static静态文件
+## 组件命名规范
+- 通用组件（全端兼容）
+uni-all-组件名
+- app组件（只适用于app）
+uni-app-组件名
+- 小程序组件（只适用于小程序）
+uni-mini-组件名
 ## APP打包上线注意事项
 1. 频繁获取权限信息（Android平台应用启动时读写手机存储、访问设备信息(如IMEI)等权限策略及提示信息）
 解决参考[频繁获取权限信息解决办法](https://ask.dcloud.net.cn/article/36549)
