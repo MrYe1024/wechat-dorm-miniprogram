@@ -1,6 +1,45 @@
 <template>
 	<view class="container">
-		<text>{{title}}</text>
+		<view class="header-view">
+			<view class="navbar-view">
+				<text @click="toPublish">报修申报</text>
+				<text @click="toAdmin">宿舍管理员</text>
+			</view>
+			<view class="picker-view">
+				<!-- 
+				下面三个属性为本人自定义添加的属性、uView官方picker组件暂不提供
+				 overlay-是否显示遮罩层 true/false
+				 isFixed-是否开启固定定位 true/false
+				 duration-遮罩打开或收起的动画过渡时间、默认300
+				 -->
+				<u-picker :visibleItemCount="3" :show="true" :overlay="false" :isFixed="false" :duration="0"
+					:showToolbar="false" :columns="floorList"></u-picker>
+			</view>
+			<uni-all-tabs :list="tabList" :justifyContent="'space-around'"></uni-all-tabs>
+		</view>
+		<view class="card-list-view">
+			<block v-for="(item, index) in applyData" :key="index">
+				<view class="card-list-view__item">
+					<view class="content border-bottom">
+						<view class="content__left">
+							<image :src="item.levelIcon" mode="aspectFill"></image>
+						</view>
+						<view class="content__right">
+							<text class="floor">{{item.floor}}栋{{item.dorm}}</text>
+							<text class="desc">{{item.desc}}</text>
+							<uni-tag size="mini" :text="item.status === 0 ? '未处理' : '已处理'" type="warning" />
+							<text class="date">{{item.createTime}}</text>
+						</view>
+					</view>
+					<view class="footer">
+						<text @click="navDetail">查看详情</text>
+					</view>
+					<view class="level-tag" :style="{backgroundColor: item.level === 1 ? '#07c160' : '#ee0a24'}">
+						{{item.level === 1 ? '普通维修' : '紧急维修'}}
+					</view>
+				</view>
+			</block>
+		</view>
 	</view>
 </template>
 
@@ -16,36 +55,37 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello',
 				tabList: [{
 					name: '当前未处理',
-					status: '未处理'
+					status: 0
 				}, {
 					name: '当前已处理',
-					status: '已处理'
+					status: 1
 				}],
-				floorList: floor,
+				floorList: [floor],
 				applyData: [],
 				isEndOfList: null
 			}
 		},
 		onLoad() {
 			// #ifdef MP-WEIXIN
-			this.getUserOpenid()
+			// this.getUserOpenid()
 			// #endif
 			this.getApplyData()
-			this.getApplyDataItem(1)
-			this.onShareMessage()
+			// this.getApplyDataItem(1)
+			// this.onShareMessage()
 		},
 		methods: {
 			// 获取用户openid
-			async getUserOpenid () {
+			async getUserOpenid() {
 				uni.login({
 					onlyAuthorize: true,
 					provider: 'weixin',
 					success: async res => {
 						console.log(res)
-						const  { result } = await uniCloud.callFunction({
+						const {
+							result
+						} = await uniCloud.callFunction({
 							name: 'getUserOpenId',
 							data: {
 								code: res.code
@@ -112,9 +152,87 @@
 
 <style lang="scss" scoped>
 	.container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
+		.header-view {
+			.navbar-view {
+				padding: 20rpx;
+				background-color: #fff;
+				color: #1989fa;
+				display: flex;
+				justify-content: space-between;
+				font-size: 32rpx;
+			}
+
+			.picker-view {
+				.u-popup ::v-deep view {
+					position: none !important;
+				}
+			}
+		}
+
+		.card-list-view {
+			&__item {
+				background-color: #fff;
+				margin: 20rpx;
+				border-radius: 10rpx;
+				position: relative;
+
+				.content {
+					display: flex;
+					padding: 20rpx;
+					position: relative;
+
+					&__left>image {
+						width: 200rpx;
+						height: 200rpx;
+						border-radius: 10rpx;
+					}
+
+					&__right {
+						display: flex;
+						flex: 1;
+						flex-direction: column;
+						justify-content: space-between;
+						margin-left: 20rpx;
+
+						.floor {
+							font-weight: bold;
+						}
+
+						.desc {
+							font-size: 28rpx;
+							margin: 5rpx 0;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							-webkit-line-clamp: 2;
+							-webkit-box-orient: vertical;
+						}
+
+						.date {
+							font-size: 28rpx;
+							color: #969799;
+							margin-top: 5rpx;
+						}
+					}
+				}
+				.footer	{
+					font-size: 28rpx;
+					  padding: 20rpx;
+					  text-align: right;
+					  color: #1989fa;
+				}
+				.level-tag {
+				  font-size: 20rpx;
+				  color: #fff;
+				  padding: 5rpx 10rpx;
+				  border-radius: 0 999px 999px 0;
+				  display: inline-block;
+				  background-color: #ee0a24;
+				  position: absolute;
+				  top: 20rpx;
+				  left: 0;
+				}
+			}
+		}
 	}
 </style>
