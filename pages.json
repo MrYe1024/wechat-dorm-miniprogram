@@ -4,7 +4,34 @@
 		"style": {
 			"navigationBarTitleText": "宿舍报修"
 		}
-	}],
+	}    ,{
+            "path" : "pages/publish/publish",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "报修申报",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/admin/admin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "管理员",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/detail/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "宿舍报修助手",

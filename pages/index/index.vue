@@ -2,8 +2,8 @@
 	<view class="container">
 		<view class="header-view">
 			<view class="navbar-view">
-				<text @click="toPublish">报修申报</text>
-				<text @click="toAdmin">宿舍管理员</text>
+				<text @click="navToPublishPage">报修申报</text>
+				<text @click="navToAdminPage">宿舍管理员</text>
 			</view>
 			<view class="picker-view">
 				<!-- 
@@ -13,9 +13,9 @@
 				 duration-遮罩打开或收起的动画过渡时间、默认300
 				 -->
 				<u-picker :visibleItemCount="3" :show="true" :overlay="false" :isFixed="false" :duration="0"
-					:showToolbar="false" :columns="floorList"></u-picker>
+					:showToolbar="false" :columns="floorList" @change="changePicker"></u-picker>
 			</view>
-			<uni-all-tabs :list="tabList" :justifyContent="'space-around'"></uni-all-tabs>
+			<uni-all-tabs :list="tabList" :justifyContent="'space-around'" @change="changeTabHandle"></uni-all-tabs>
 		</view>
 		<view class="card-list-view">
 			<block v-for="(item, index) in applyData" :key="index">
@@ -32,7 +32,7 @@
 						</view>
 					</view>
 					<view class="footer">
-						<text @click="navDetail">查看详情</text>
+						<text @click="navToDetailPage(item)">查看详情</text>
 					</view>
 					<view class="level-tag" :style="{backgroundColor: item.level === 1 ? '#07c160' : '#ee0a24'}">
 						{{item.level === 1 ? '普通维修' : '紧急维修'}}
@@ -67,13 +67,33 @@
 				isEndOfList: null
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			// #ifdef MP-WEIXIN
-			// this.getUserOpenid()
+			this.getUserOpenid()
 			// #endif
 			this.getApplyData()
-			// this.getApplyDataItem(1)
-			// this.onShareMessage()
+			this.onShareMessage()
+			this.createInterstitialAd()
+			if (options.id === 'success') {
+				this.addInterstitialAd(interstitialAd)
+			}
+		},
+		// 触底刷新
+		onReachBottom() {
+			!this.isEndOfList && this.getApplyData()
+		},
+		onShareAppMessage() {
+			return {
+				title: this.shareData.title,
+				path: this.shareData.path,
+				imageUrl: this.shareData.imageUrl,
+				success: res => {
+					console.log(res)
+				},
+				fail: err => {
+					console.log(err)
+				}
+			}
 		},
 		methods: {
 			// 获取用户openid
@@ -97,6 +117,25 @@
 					}
 				})
 			},
+			// 初始化广告
+			createInterstitialAd() {
+				if (wx.createInterstitialAd) {
+					interstitialAd = wx.createInterstitialAd({
+						adUnitId: 'adunit-40082f65d4929d84'
+					})
+					interstitialAd.onLoad(() => {})
+					interstitialAd.onError((err) => {})
+					interstitialAd.onClose(() => {})
+				}
+			},
+			// 显示插屏广告
+			addInterstitialAd(interstitialAd) {
+				if (interstitialAd) {
+					interstitialAd.show().catch((err) => {
+						console.error(err)
+					})
+				}
+			},
 			// 获取申报数据
 			async getApplyData() {
 				uni.showLoading({
@@ -107,10 +146,16 @@
 					status: this.tabList[tabsIndex].status,
 					floor: floorIndex === 0 ? {} : floorIndex
 				}).skip(this.applyData.length).orderBy('createTime', 'desc').get()
-				console.log(res)
 				this.applyData = [...this.applyData, ...res.result.data]
 				this.isEndOfList = res.result.data.length < limit ? true : false
 				uni.hideLoading()
+			},
+			// 切换tab事件
+			changeTabHandle(evt) {
+				tabsIndex = evt.index
+				this.applyData = []
+				this.getApplyData()
+				this.addInterstitialAd(interstitialAd)
 			},
 			// 选择栋数获取申报数据
 			async getApplyDataItem(floor) {
@@ -125,8 +170,17 @@
 				if (res.success) {
 					this.applyData = res.result.data
 				}
-				console.log(res)
 				uni.hideLoading()
+			},
+			// 切换楼层事件
+			changePicker(evt) {
+				floorIndex = evt.index
+				if (floorIndex === 0) {
+					this.applyData = []
+					this.getApplyData()
+				} else {
+					this.getApplyDataItem(floorIndex);
+				}
 			},
 			// 获取角色列表
 			async getUserRole(openid) {
@@ -144,7 +198,24 @@
 				if (res.success) {
 					this.shareData = res.result.data[0]
 				}
-				console.log(res)
+			},
+			// 查看详情
+			navToDetailPage(item) {
+				uni.navigateTo({
+					url: '/pages/detail/detail?detail=' + JSON.stringify(item)
+				})
+			},
+			// 报修申报跳转
+			navToPublishPage() {
+				uni.navigateTo({
+					url: '/pages/publish/publish'
+				})
+			},
+			// 管理员跳转
+			navToAdminPage() {
+				uni.navigateTo({
+					url: '/pages/admin/admin'
+				})
 			}
 		}
 	}
@@ -215,22 +286,24 @@
 						}
 					}
 				}
-				.footer	{
+
+				.footer {
 					font-size: 28rpx;
-					  padding: 20rpx;
-					  text-align: right;
-					  color: #1989fa;
+					padding: 20rpx;
+					text-align: right;
+					color: #1989fa;
 				}
+
 				.level-tag {
-				  font-size: 20rpx;
-				  color: #fff;
-				  padding: 5rpx 10rpx;
-				  border-radius: 0 999px 999px 0;
-				  display: inline-block;
-				  background-color: #ee0a24;
-				  position: absolute;
-				  top: 20rpx;
-				  left: 0;
+					font-size: 20rpx;
+					color: #fff;
+					padding: 5rpx 10rpx;
+					border-radius: 0 999px 999px 0;
+					display: inline-block;
+					background-color: #ee0a24;
+					position: absolute;
+					top: 20rpx;
+					left: 0;
 				}
 			}
 		}
