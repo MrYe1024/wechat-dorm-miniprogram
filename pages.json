@@ -2,13 +2,13 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "宿舍报修"
+			"navigationBarTitleText": "宿舍报修助手"
 		}
 	}    ,{
             "path" : "pages/publish/publish",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "报修申报",
+                "navigationBarTitleText": "申报申请",
                 "enablePullDownRefresh": false
             }
             
@@ -17,7 +17,7 @@
             "path" : "pages/admin/admin",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "管理员",
+                "navigationBarTitleText": "申报管理",
                 "enablePullDownRefresh": false
             }
             
@@ -26,7 +26,7 @@
             "path" : "pages/detail/detail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "申报详情",
                 "enablePullDownRefresh": false
             }
             

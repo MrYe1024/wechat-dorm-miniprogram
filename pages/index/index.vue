@@ -27,7 +27,7 @@
 						<view class="content__right">
 							<text class="floor">{{item.floor}}栋{{item.dorm}}</text>
 							<text class="desc">{{item.desc}}</text>
-							<uni-tag size="mini" :text="item.status === 0 ? '未处理' : '已处理'" type="warning" />
+							<uni-tag size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
 							<text class="date">{{item.createTime}}</text>
 						</view>
 					</view>
@@ -39,6 +39,9 @@
 					</view>
 				</view>
 			</block>
+		</view>
+		<view class="footer-view" v-if="applyData.length">
+			<text @click="copyOpenid">@2019-2023 宿舍报修助手</text>
 		</view>
 	</view>
 </template>
@@ -56,11 +59,14 @@
 		data() {
 			return {
 				tabList: [{
-					name: '当前未处理',
+					name: '未处理',
 					status: 0
 				}, {
-					name: '当前已处理',
+					name: '处理中',
 					status: 1
+				}, {
+					name: '已完成',
+					status: 2
 				}],
 				floorList: [floor],
 				applyData: [],
@@ -73,10 +79,12 @@
 			// #endif
 			this.getApplyData()
 			this.onShareMessage()
+			// #ifdef MP-WEIXIN
 			this.createInterstitialAd()
 			if (options.id === 'success') {
 				this.addInterstitialAd(interstitialAd)
 			}
+			// #endif
 		},
 		// 触底刷新
 		onReachBottom() {
@@ -92,6 +100,20 @@
 				},
 				fail: err => {
 					console.log(err)
+				}
+			}
+		},
+		computed: {
+			applyStatus () {
+				return (status) => {
+					return Number(status) === 0 ? '未处理' 
+					: Number(status) === 1 ? '处理中' : '已完成'
+				}
+			},
+			tagType () {
+				return (status) => {
+					return Number(status) === 0 ? 'error' 
+					: Number(status) === 1 ? 'warning' : 'success'
 				}
 			}
 		},
@@ -155,7 +177,9 @@
 				tabsIndex = evt.index
 				this.applyData = []
 				this.getApplyData()
+				// #ifdef MP-WEIXIN
 				this.addInterstitialAd(interstitialAd)
+				// #endif
 			},
 			// 选择栋数获取申报数据
 			async getApplyDataItem(floor) {
@@ -185,11 +209,10 @@
 			// 获取角色列表
 			async getUserRole(openid) {
 				const res = await db.collection('dorm_roles').get()
-				console.log(res)
 				if (res.success) {
 					const openidList = res.result.data.filter(item => item.role === '超级管理员').map(item => item.openid)
 					this.isAdmin = openidList.includes(openid)
-					console.log(this.isAdmin)
+					uni.setStorageSync('isAdmin')
 				}
 			},
 			// 获取分享数据
@@ -213,8 +236,22 @@
 			},
 			// 管理员跳转
 			navToAdminPage() {
-				uni.navigateTo({
-					url: '/pages/admin/admin'
+				if (this.isAdmin) {
+					uni.navigateTo({
+						url: '/pages/admin/admin'
+					})
+				} else {
+					wx.showToast({
+						title: '暂无权限',
+						icon: 'error',
+						duration: 1000
+					})
+				}
+			},
+			// 复制openid
+			copyOpenid () {
+				uni.setClipboardData({
+					data: uni.getStorageSync('openid')
 				})
 			}
 		}
@@ -306,6 +343,12 @@
 					left: 0;
 				}
 			}
+		}
+		.footer-view {
+			text-align: center;
+			padding: 30rpx 0;
+			font-size: 26rpx;
+			color: #999;
 		}
 	}
 </style>

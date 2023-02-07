@@ -48,7 +48,7 @@
 		data() {
 			return {
 				user: null,
-				isAdmin: true
+				isAdmin: false
 			}
 		},
 		onLoad(options) {
