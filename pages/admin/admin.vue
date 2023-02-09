@@ -29,9 +29,9 @@
 					</view>
 					<view class="card__footer">
 						<text style="color: #1989fa;" @click="navToDetailPage(item)">查看详情</text>
-						<text v-if="item.status === 0" style="color: #f3a73f;">确认接单</text>
-						<text v-if="item.status === 1" style="color: #18bc37;">处理完成</text>
-						<text v-if="item.status === 2" style="color: #e43d33;">删除</text>
+						<text v-if="item.status === 0" style="color: #f3a73f;" @click="confirmOrder(item)">接收订单</text>
+						<text v-if="item.status === 1" style="color: #18bc37;" @click="completeOrder(item)">处理完成</text>
+						<text v-if="item.status === 2" style="color: #e43d33;" @click="deleteOrder(item)">删除</text>
 					</view>
 					<view class="level-tag" :style="{backgroundColor: item.level === 1 ? '#07c160' : '#ee0a24'}">
 						{{item.level === 1 ? '普通维修' : '紧急维修'}}
@@ -50,6 +50,7 @@
 		floor
 	} from '../../config/config.default';
 	const db = uniCloud.database();
+	const http = uniCloud.importObject('feedbackSubscribeMsg')
 	const limit = 20;
 	let tabsIndex = 0;
 	let floorIndex = 0;
@@ -138,6 +139,86 @@
 				} else {
 					this.getApplyDataItem(floorIndex);
 				}
+			},
+			// 接收订单
+			async confirmOrder (event) {
+				uni.showModal({
+				    title: '温馨提示',
+				    content: '是否接收处理该订单?',
+				    success: async (res) => {
+						if (res.confirm) {
+							const result = await db.collection('dorm_apply').where({
+								_id: event._id
+							}).update({
+								status: 1
+							})
+							if (result.success) {
+								this.applyData = []
+								this.getApplyData()
+								// #ifdef MP-WEIXIN
+								http.sendMessage({
+									openid: event.openid,
+									dorm: event.dorm,
+									status: '管理员已接单',
+									name: '叶志远',
+									phone: '15113624649',
+									remarks: '管理员已接单，请留意订单状态，谢谢您!'
+								})
+								// #endif
+							}
+						}
+					}
+				})
+			},
+			// 处理完成
+			completeOrder (event) {
+				uni.showModal({
+				    title: '温馨提示',
+				    content: '是否处理完成该订单?',
+				    success: async (res) => {
+						if (res.confirm) {
+							const result = await db.collection('dorm_apply').where({
+								_id: event._id
+							}).update({
+								status: 2
+							})
+							if (result.success) {
+								this.applyData = []
+								this.getApplyData()
+								// #ifdef MP-WEIXIN
+								http.sendMessage({
+									openid: event.openid,
+									dorm: event.dorm,
+									status: '订单已完成',
+									name: '叶志远',
+									phone: '15113624649',
+									remarks: '如有疑问，请联系管理员，祝您生活愉快!'
+								})
+								// #endif
+							}
+						}
+					}
+				})
+			},
+			// 删除订单
+			deleteOrder (event) {
+				uni.showModal({
+				    title: '温馨提示',
+				    content: '是否删除该订单?',
+				    success: async (res) => {
+						if (res.confirm) {
+							const result = await db.collection('dorm_apply').where({
+								_id: event._id
+							}).remove({
+								status: 2
+							})
+							if (result.success) {
+								this.applyData = []
+								this.getApplyData()
+							}
+						}
+					}
+				})
 			},
 			// 查看详情
 			navToDetailPage(item) {

@@ -10,7 +10,7 @@
 				<view class="apply-item-title">申报宿舍：</view>
 				<view class="item-content">{{user.floor}}栋{{user.dorm}}</view>
 			</view>
-			<view class="apply-item" v-if="isAdmin">
+			<view class="apply-item">
 				<view class="apply-item-title">联系电话：</view>
 				<view class="item-content">{{user.phone}}</view>
 				<view class="contact-phone-footer">
@@ -24,11 +24,11 @@
 			</view>
 			<view class="apply-item">
 				<view class="apply-item-title">申报级别：</view>
-				<view class="item-content">{{user.level}}</view>
+				<view class="item-content">{{user.level === 1 ? '普通维修' : '紧急维修'}}</view>
 			</view>
 			<view class="apply-item">
 				<view class="apply-item-title">申报状态：</view>
-				<view class="item-content">{{user.status}}</view>
+				<view class="item-content">{{applyStatus()}}</view>
 			</view>
 			<view class="apply-item">
 				<view class="apply-item-title">申报日期：</view>
@@ -54,12 +54,17 @@
 		onLoad(options) {
 			if (options.detail) {
 				this.user = JSON.parse(options.detail)
+				this.applyStatus(this.user.status)
 			}
 			if (options.isAdmin) {
 				this.isAdmin = options.isAdmin
 			}
 		},
 		methods: {
+			applyStatus (status) {
+				return Number(status) === 0 ? '未处理'
+				: Number(status) === 1 ? '处理中' : '已完成'
+			},
 			// 一键联系
 			callApplyPhone() {
 				uni.makePhoneCall({
@@ -107,7 +112,7 @@
 	}
 
 	.item-content {
-		padding-top: 4rpx;
+		padding-top: 8rpx;
 		color: #ee0a24;
 	}
 

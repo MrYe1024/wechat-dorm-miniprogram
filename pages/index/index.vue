@@ -166,7 +166,8 @@
 				})
 				const res = await db.collection('dorm_apply').where({
 					status: this.tabList[tabsIndex].status,
-					floor: floorIndex === 0 ? {} : floorIndex
+					floor: floorIndex === 0 ? {} : floorIndex,
+					openid: uni.getStorageSync('openid')
 				}).skip(this.applyData.length).orderBy('createTime', 'desc').get()
 				this.applyData = [...this.applyData, ...res.result.data]
 				this.isEndOfList = res.result.data.length < limit ? true : false
@@ -237,11 +238,17 @@
 			// 管理员跳转
 			navToAdminPage() {
 				if (this.isAdmin) {
+					// 订阅报修订单提醒
+					// #ifdef MP-WEIXIN
+					wx.requestSubscribeMessage({
+					    tmplIds: ['4Lnbo47VBu7woS0m0O8UjZ-7TBozETC4Mr5tdkwJ4v4'],
+					})
+					// #endif
 					uni.navigateTo({
 						url: '/pages/admin/admin'
 					})
 				} else {
-					wx.showToast({
+					uni.showToast({
 						title: '暂无权限',
 						icon: 'error',
 						duration: 1000

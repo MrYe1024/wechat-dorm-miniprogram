@@ -14,7 +14,7 @@
 			<text>申报宿舍：</text>
 			<picker @change="selectFloor" :range="pickerList">
 				<view class="picker">
-					<input class="in-2" type="number" v-model="formData.floor"></input>
+					<input :disabled="true" class="in-2" type="number" v-model="formData.floor"></input>
 				</view>
 			</picker>
 			<text class="text-dorm">栋</text>
@@ -61,6 +61,7 @@
 		moment
 	} from '../../utils/moment.js'
 	const db = uniCloud.database()
+	const http = uniCloud.importObject('applySubscribeMsg')
 	export default {
 		data() {
 			return {
@@ -108,12 +109,19 @@
 			// 提交申报
 			submitApplyData() {
 				if (this.validateForm()) {
+					// 订阅报修反馈通知
+					// #ifdef MP-WEIXIN
+					wx.requestSubscribeMessage({
+					    tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
+					})
+					// #endif
 					wx.showLoading({
 						title: '正在提交...',
 						mask: true
 					})
 					console.log(this.formData)
-					db.collection('dorm_apply').add(this.formData).then(res => {
+					db.collection('dorm_apply').add(this.formData).then(async res => {
+						await http.sendMessage(this.formData)
 						wx.hideLoading()
 						wx.showToast({
 							title: '提交成功',

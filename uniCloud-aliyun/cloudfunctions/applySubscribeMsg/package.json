@@ -1,0 +1,7 @@
+{
+  "name": "applySubscribeMsg",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
