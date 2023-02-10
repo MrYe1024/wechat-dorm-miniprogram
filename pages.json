@@ -4,34 +4,28 @@
 		"style": {
 			"navigationBarTitleText": "宿舍报修助手"
 		}
-	}    ,{
-            "path" : "pages/publish/publish",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "申报申请",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/admin/admin",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "申报管理",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/detail/detail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "申报详情",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	}, {
+		"path": "pages/publish/publish",
+		"style": {
+			"navigationBarTitleText": "申报申请",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/admin/admin",
+		"style": {
+			"navigationBarTitleText": "申报管理",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/detail/detail",
+		"style": {
+			"navigationBarTitleText": "申报详情",
+			"enablePullDownRefresh": false
+		}
+
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "宿舍报修助手",

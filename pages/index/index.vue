@@ -17,7 +17,7 @@
 			</view>
 			<uni-all-tabs :list="tabList" :justifyContent="'space-around'" @change="changeTabHandle"></uni-all-tabs>
 		</view>
-		<view class="card-list-view" v-if="false">
+		<view class="card-list-view">
 			<block v-for="(item, index) in applyData" :key="index">
 				<view class="card-list-view__item">
 					<view class="content border-bottom">
@@ -40,7 +40,7 @@
 				</view>
 			</block>
 		</view>
-		<uni-all-empty-state :imgUrl="emptyState[currentIndex]"></uni-all-empty-state>
+		<uni-all-empty-state v-if="!applyData.length" :imgUrl="emptyState[currentIndex]"></uni-all-empty-state>
 		<view class="footer-view" v-if="applyData.length">
 			<text @click="copyOpenid">@2019-2023 宿舍报修助手</text>
 		</view>
