@@ -17,7 +17,7 @@
 			</view>
 			<uni-all-tabs :list="tabList" :justifyContent="'space-around'" @change="changeTabHandle"></uni-all-tabs>
 		</view>
-		<view class="card-list-view">
+		<view class="card-list-view" v-if="false">
 			<block v-for="(item, index) in applyData" :key="index">
 				<view class="card-list-view__item">
 					<view class="content border-bottom">
@@ -40,6 +40,7 @@
 				</view>
 			</block>
 		</view>
+		<uni-all-empty-state :imgUrl="emptyState[currentIndex]"></uni-all-empty-state>
 		<view class="footer-view" v-if="applyData.length">
 			<text @click="copyOpenid">@2019-2023 宿舍报修助手</text>
 		</view>
@@ -55,6 +56,7 @@
 	let tabsIndex = 0;
 	let floorIndex = 0;
 	var interstitialAd = null;
+	let videoAd = null;
 	export default {
 		data() {
 			return {
@@ -68,9 +70,11 @@
 					name: '已完成',
 					status: 2
 				}],
+				emptyState: ['/static/images/nodata-1.png', '/static/images/nodata-2.png', '/static/images/nodata-3.png'],
 				floorList: [floor],
 				applyData: [],
-				isEndOfList: null
+				isEndOfList: null,
+				currentIndex: 0
 			}
 		},
 		onLoad(options) {
@@ -81,6 +85,7 @@
 			this.onShareMessage()
 			// #ifdef MP-WEIXIN
 			this.createInterstitialAd()
+			this.createRewardedVideoAd()
 			if (options.id === 'success') {
 				this.addInterstitialAd(interstitialAd)
 			}
@@ -150,12 +155,45 @@
 					interstitialAd.onClose(() => {})
 				}
 			},
+			// 初始化激励广告
+			createRewardedVideoAd () {
+				if (wx.createRewardedVideoAd) {
+				  videoAd = wx.createRewardedVideoAd({
+				    adUnitId: 'adunit-cbebfbb7e560c89c'
+				  })
+				  videoAd.onLoad(() => {
+					  console.log('激励广告初始化成功')
+				  })
+				  videoAd.onError((err) => {})
+				  videoAd.onClose((res) => {
+					  if (res.isEnded) {
+						  uni.navigateTo({
+						  	url: '/pages/admin/admin'
+						  })
+					  }
+					  console.log('广告已关闭')
+				  })
+				}
+			},
 			// 显示插屏广告
 			addInterstitialAd(interstitialAd) {
 				if (interstitialAd) {
 					interstitialAd.show().catch((err) => {
 						console.error(err)
 					})
+				}
+			},
+			// 显示激励广告
+			addRewardedVideoAd () {
+				if (videoAd) {
+				  videoAd.show().catch(() => {
+				    // 失败重试
+				    videoAd.load()
+				      .then(() => videoAd.show())
+				      .catch(err => {
+				        console.log('激励视频 广告显示失败')
+				      })
+				  })
 				}
 			},
 			// 获取申报数据
@@ -176,6 +214,7 @@
 			// 切换tab事件
 			changeTabHandle(evt) {
 				tabsIndex = evt.index
+				this.currentIndex = evt.index
 				this.applyData = []
 				this.getApplyData()
 				// #ifdef MP-WEIXIN
@@ -237,6 +276,15 @@
 			},
 			// 管理员跳转
 			navToAdminPage() {
+				// #ifdef MP-WEIXIN
+				uni.showModal({
+					title: '温馨提示',
+					content: '是否观看6-15秒广告进入页面',
+					success: async (res) => {
+						this.addRewardedVideoAd()
+					}
+				})
+				// #endif
 				if (this.isAdmin) {
 					// 订阅报修订单提醒
 					// #ifdef MP-WEIXIN
@@ -244,15 +292,6 @@
 					    tmplIds: ['4Lnbo47VBu7woS0m0O8UjZ-7TBozETC4Mr5tdkwJ4v4'],
 					})
 					// #endif
-					uni.navigateTo({
-						url: '/pages/admin/admin'
-					})
-				} else {
-					uni.showToast({
-						title: '暂无权限',
-						icon: 'error',
-						duration: 1000
-					})
 				}
 			},
 			// 复制openid
