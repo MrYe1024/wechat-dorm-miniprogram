@@ -33,4 +33,4 @@ wx.cloud.init({
 
 ## 项目体验
 
-![](https://646f-dorm-8svqc-1259164383.tcb.qcloud.la/gh_6d5907af00c8_258%20.jpg?sign=112d7629f8e45567b2f77b66a98c5ec3&t=1627296182)
+![](https://mp-e93e0c5f-05cf-4713-9d34-a6449768f5b0.cdn.bspapp.com/cloudstorage/f3e33fd6-e9c4-47c5-a844-2035831ac42c.jpg)
