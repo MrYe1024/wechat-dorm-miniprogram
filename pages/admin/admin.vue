@@ -39,6 +39,7 @@
 				</view>
 			</block>
 		</view>
+		<uni-all-empty-state v-if="!applyData.length" :imgUrl="emptyState[currentIndex]"></uni-all-empty-state>
 		<view class="footer-view" v-if="applyData.length">
 			<text @click="copyOpenid">@2019-2023 宿舍报修助手</text>
 		</view>
@@ -46,9 +47,7 @@
 </template>
 
 <script>
-	import {
-		floor
-	} from '../../config/config.default';
+	import mixin from '../../mixins/mixin.js'
 	const db = uniCloud.database();
 	const http = uniCloud.importObject('feedbackSubscribeMsg')
 	const limit = 20;
@@ -56,21 +55,10 @@
 	let floorIndex = 0;
 	var interstitialAd = null;
 	export default {
+		mixins: [mixin],
 		data() {
 			return {
-				tabList: [{
-					name: '未处理',
-					status: 0
-				}, {
-					name: '处理中',
-					status: 1
-				}, {
-					name: '已完成',
-					status: 2
-				}],
-				floorList: [floor],
-				applyData: [],
-				isEndOfList: null
+
 			}
 		},
 		onLoad(options) {
@@ -79,20 +67,6 @@
 		// 触底刷新
 		onReachBottom() {
 			!this.isEndOfList && this.getApplyData()
-		},
-		computed: {
-			applyStatus () {
-				return (status) => {
-					return Number(status) === 0 ? '未处理' 
-					: Number(status) === 1 ? '处理中' : '已完成'
-				}
-			},
-			tagType () {
-				return (status) => {
-					return Number(status) === 0 ? 'error' 
-					: Number(status) === 1 ? 'warning' : 'success'
-				}
-			}
 		},
 		methods: {
 			// 获取申报数据
@@ -112,6 +86,7 @@
 			// 切换tab事件
 			changeTabHandle(evt) {
 				tabsIndex = evt.index
+				this.currentIndex = evt.index
 				this.applyData = []
 				this.getApplyData()
 			},
@@ -142,6 +117,7 @@
 			},
 			// 接收订单
 			async confirmOrder (event) {
+				if (!this.isAdminValidate()) return
 				uni.showModal({
 				    title: '温馨提示',
 				    content: '是否接收处理该订单?',
@@ -172,6 +148,7 @@
 			},
 			// 处理完成
 			completeOrder (event) {
+				if (!this.isAdminValidate()) return
 				uni.showModal({
 				    title: '温馨提示',
 				    content: '是否处理完成该订单?',
@@ -202,6 +179,7 @@
 			},
 			// 删除订单
 			deleteOrder (event) {
+				if (!this.isAdminValidate()) return
 				uni.showModal({
 				    title: '温馨提示',
 				    content: '是否删除该订单?',
@@ -220,115 +198,21 @@
 					}
 				})
 			},
-			// 查看详情
-			navToDetailPage(item) {
-				uni.navigateTo({
-					url: '/pages/detail/detail?detail=' + JSON.stringify(item)+'&isAdmin=true'
-				})
-			},
-			// 复制openid
-			copyOpenid () {
-				uni.setClipboardData({
-					data: uni.getStorageSync('openid')
-				})
+			// 是否为管理员
+			isAdminValidate () {
+				const isAdmin = uni.getStorageSync('isAdmin')
+				if (!isAdmin) {
+					uni.showToast({
+						title: '暂无权限',
+						icon: 'error'
+					})
+				}
+				return isAdmin
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.container {
-		.header-view {
-			.navbar-view {
-				padding: 20rpx;
-				background-color: #fff;
-				color: #1989fa;
-				display: flex;
-				justify-content: space-between;
-				font-size: 32rpx;
-			}
-
-			.picker-view {
-				.u-popup ::v-deep view {
-					position: none !important;
-				}
-			}
-		}
-
-		.card-list-view {
-			&__item {
-				background-color: #fff;
-				margin: 20rpx;
-				border-radius: 10rpx;
-				position: relative;
-
-				.content {
-					display: flex;
-					padding: 20rpx;
-					position: relative;
-
-					&__left>image {
-						width: 200rpx;
-						height: 200rpx;
-						border-radius: 10rpx;
-					}
-
-					&__right {
-						display: flex;
-						flex: 1;
-						flex-direction: column;
-						justify-content: space-between;
-						margin-left: 20rpx;
-
-						.floor {
-							font-weight: bold;
-						}
-
-						.desc {
-							font-size: 28rpx;
-							margin: 5rpx 0;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							display: -webkit-box;
-							-webkit-line-clamp: 2;
-							-webkit-box-orient: vertical;
-						}
-
-						.date {
-							font-size: 28rpx;
-							color: #969799;
-							margin-top: 5rpx;
-						}
-					}
-				}
-
-				.card__footer {
-					text-align: right;
-					font-size: 28rpx;
-					padding: 20rpx;
-					text {
-						margin-left: 20rpx;
-					}
-				}
-
-				.level-tag {
-					font-size: 20rpx;
-					color: #fff;
-					padding: 5rpx 10rpx;
-					border-radius: 0 999px 999px 0;
-					display: inline-block;
-					background-color: #ee0a24;
-					position: absolute;
-					top: 20rpx;
-					left: 0;
-				}
-			}
-		}
-		.footer-view {
-			text-align: center;
-			padding: 30rpx 0;
-			font-size: 26rpx;
-			color: #999;
-		}
-	}
+	@import '../../styles/index.scss';
 </style>

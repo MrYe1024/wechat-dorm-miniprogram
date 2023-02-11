@@ -31,8 +31,8 @@
 							<text class="date">{{item.createTime}}</text>
 						</view>
 					</view>
-					<view class="footer">
-						<text @click="navToDetailPage(item)">查看详情</text>
+					<view class="card__footer">
+						<text style="color: #1989fa;" @click="navToDetailPage(item)">查看详情</text>
 					</view>
 					<view class="level-tag" :style="{backgroundColor: item.level === 1 ? '#07c160' : '#ee0a24'}">
 						{{item.level === 1 ? '普通维修' : '紧急维修'}}
@@ -48,9 +48,7 @@
 </template>
 
 <script>
-	import {
-		floor
-	} from '../../config/config.default';
+	import mixin from '../../mixins/mixin.js'
 	const db = uniCloud.database();
 	const limit = 20;
 	let tabsIndex = 0;
@@ -58,23 +56,10 @@
 	var interstitialAd = null;
 	let videoAd = null;
 	export default {
+		mixins: [mixin],
 		data() {
 			return {
-				tabList: [{
-					name: '未处理',
-					status: 0
-				}, {
-					name: '处理中',
-					status: 1
-				}, {
-					name: '已完成',
-					status: 2
-				}],
-				emptyState: ['/static/images/nodata-1.png', '/static/images/nodata-2.png', '/static/images/nodata-3.png'],
-				floorList: [floor],
-				applyData: [],
-				isEndOfList: null,
-				currentIndex: 0
+
 			}
 		},
 		onLoad(options) {
@@ -105,20 +90,6 @@
 				},
 				fail: err => {
 					console.log(err)
-				}
-			}
-		},
-		computed: {
-			applyStatus () {
-				return (status) => {
-					return Number(status) === 0 ? '未处理' 
-					: Number(status) === 1 ? '处理中' : '已完成'
-				}
-			},
-			tagType () {
-				return (status) => {
-					return Number(status) === 0 ? 'error' 
-					: Number(status) === 1 ? 'warning' : 'success'
 				}
 			}
 		},
@@ -252,7 +223,7 @@
 				if (res.success) {
 					const openidList = res.result.data.filter(item => item.role === '超级管理员').map(item => item.openid)
 					this.isAdmin = openidList.includes(openid)
-					uni.setStorageSync('isAdmin')
+					uni.setStorageSync('isAdmin', this.isAdmin)
 				}
 			},
 			// 获取分享数据
@@ -261,12 +232,6 @@
 				if (res.success) {
 					this.shareData = res.result.data[0]
 				}
-			},
-			// 查看详情
-			navToDetailPage(item) {
-				uni.navigateTo({
-					url: '/pages/detail/detail?detail=' + JSON.stringify(item)
-				})
 			},
 			// 报修申报跳转
 			navToPublishPage() {
@@ -281,7 +246,9 @@
 					title: '温馨提示',
 					content: '是否观看6-15秒广告进入页面',
 					success: async (res) => {
-						this.addRewardedVideoAd()
+						if (res.confirm) {
+							this.addRewardedVideoAd()
+						}
 					}
 				})
 				// #endif
@@ -305,96 +272,5 @@
 </script>
 
 <style lang="scss" scoped>
-	.container {
-		.header-view {
-			.navbar-view {
-				padding: 20rpx;
-				background-color: #fff;
-				color: #1989fa;
-				display: flex;
-				justify-content: space-between;
-				font-size: 32rpx;
-			}
-
-			.picker-view {
-				.u-popup ::v-deep view {
-					position: none !important;
-				}
-			}
-		}
-
-		.card-list-view {
-			&__item {
-				background-color: #fff;
-				margin: 20rpx;
-				border-radius: 10rpx;
-				position: relative;
-
-				.content {
-					display: flex;
-					padding: 20rpx;
-					position: relative;
-
-					&__left>image {
-						width: 200rpx;
-						height: 200rpx;
-						border-radius: 10rpx;
-					}
-
-					&__right {
-						display: flex;
-						flex: 1;
-						flex-direction: column;
-						justify-content: space-between;
-						margin-left: 20rpx;
-
-						.floor {
-							font-weight: bold;
-						}
-
-						.desc {
-							font-size: 28rpx;
-							margin: 5rpx 0;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							display: -webkit-box;
-							-webkit-line-clamp: 2;
-							-webkit-box-orient: vertical;
-						}
-
-						.date {
-							font-size: 28rpx;
-							color: #969799;
-							margin-top: 5rpx;
-						}
-					}
-				}
-
-				.footer {
-					font-size: 28rpx;
-					padding: 20rpx;
-					text-align: right;
-					color: #1989fa;
-				}
-
-				.level-tag {
-					font-size: 20rpx;
-					color: #fff;
-					padding: 5rpx 10rpx;
-					border-radius: 0 999px 999px 0;
-					display: inline-block;
-					background-color: #ee0a24;
-					position: absolute;
-					top: 20rpx;
-					left: 0;
-				}
-			}
-		}
-		.footer-view {
-			text-align: center;
-			padding: 30rpx 0;
-			font-size: 26rpx;
-			color: #999;
-		}
-	}
+	@import '../../styles/index.scss';
 </style>

@@ -1,0 +1,88 @@
+.container {
+		.header-view {
+			.navbar-view {
+				padding: 20rpx;
+				background-color: #fff;
+				color: #1989fa;
+				display: flex;
+				justify-content: space-between;
+				font-size: 32rpx;
+			}
+		}
+
+		.card-list-view {
+			&__item {
+				background-color: #fff;
+				margin: 20rpx;
+				border-radius: 10rpx;
+				position: relative;
+
+				.content {
+					display: flex;
+					padding: 20rpx;
+					position: relative;
+
+					&__left>image {
+						width: 200rpx;
+						height: 200rpx;
+						border-radius: 10rpx;
+					}
+
+					&__right {
+						display: flex;
+						flex: 1;
+						flex-direction: column;
+						justify-content: space-between;
+						margin-left: 20rpx;
+
+						.floor {
+							font-weight: bold;
+						}
+
+						.desc {
+							font-size: 28rpx;
+							margin: 5rpx 0;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							-webkit-line-clamp: 2;
+							-webkit-box-orient: vertical;
+						}
+
+						.date {
+							font-size: 28rpx;
+							color: #969799;
+							margin-top: 5rpx;
+						}
+					}
+				}
+
+				.card__footer {
+					text-align: right;
+					font-size: 28rpx;
+					padding: 20rpx;
+					text {
+						margin-left: 20rpx;
+					}
+				}
+
+				.level-tag {
+					font-size: 20rpx;
+					color: #fff;
+					padding: 5rpx 10rpx;
+					border-radius: 0 999px 999px 0;
+					display: inline-block;
+					background-color: #ee0a24;
+					position: absolute;
+					top: 20rpx;
+					left: 0;
+				}
+			}
+		}
+		.footer-view {
+			text-align: center;
+			padding: 30rpx 0;
+			font-size: 26rpx;
+			color: #999;
+		}
+	}
