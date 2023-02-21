@@ -49,14 +49,14 @@
 
 <script>
 	import mixin from '../../mixins/mixin.js'
-	const db = uniCloud.database();
-	const limit = 20;
-	let tabsIndex = 0;
-	let floorIndex = 0;
-	var interstitialAd = null;
-	let videoAd = null;
+	const db = uniCloud.database()
+	const limit = 20 // 每次最多获取20条数据
+	let tabsIndex = 0 // 默认tabs下标
+	let floorIndex = 0 // 默认楼层下标
+	var interstitialAd = null // 插屏广告对象
+	let videoAd = null // 激励广告对象
 	export default {
-		mixins: [mixin],
+		mixins: [mixin], // 引入可复用的代码
 		data() {
 			return {
 
@@ -80,13 +80,18 @@
 		onReachBottom() {
 			!this.isEndOfList && this.getApplyData()
 		},
+		// 分享小程序
 		onShareAppMessage() {
 			return {
 				title: this.shareData.title,
 				path: this.shareData.path,
 				imageUrl: this.shareData.imageUrl,
 				success: res => {
-					console.log(res)
+					uni.showToast({
+						title: '分享成功',
+						icon: 'success',
+						duration: 1000
+					})
 				},
 				fail: err => {
 					console.log(err)
@@ -94,7 +99,9 @@
 			}
 		},
 		methods: {
-			// 获取用户openid
+			/**
+			 * @description 调用云函数获取用户openid
+			 * */
 			async getUserOpenid() {
 				uni.login({
 					onlyAuthorize: true,
@@ -115,7 +122,9 @@
 					}
 				})
 			},
-			// 初始化广告
+			/**
+			 * @description 初始化插屏广告
+			 * */
 			createInterstitialAd() {
 				if (wx.createInterstitialAd) {
 					interstitialAd = wx.createInterstitialAd({
@@ -126,7 +135,9 @@
 					interstitialAd.onClose(() => {})
 				}
 			},
-			// 初始化激励广告
+			/**
+			 * @description 初始化激励广告
+			 * */
 			createRewardedVideoAd () {
 				if (wx.createRewardedVideoAd) {
 				  videoAd = wx.createRewardedVideoAd({
@@ -146,7 +157,9 @@
 				  })
 				}
 			},
-			// 显示插屏广告
+			/**
+			 * @description 投放插屏广告
+			 * */
 			addInterstitialAd(interstitialAd) {
 				if (interstitialAd) {
 					interstitialAd.show().catch((err) => {
@@ -154,7 +167,9 @@
 					})
 				}
 			},
-			// 显示激励广告
+			/**
+			 * @description 投放激励广告
+			 * */
 			addRewardedVideoAd () {
 				if (videoAd) {
 				  videoAd.show().catch(() => {
@@ -167,7 +182,9 @@
 				  })
 				}
 			},
-			// 获取申报数据
+			/**
+			 * @description 根据申报状态、楼层、获取申报数据
+			 * */
 			async getApplyData() {
 				uni.showLoading({
 					title: '加载中...',
@@ -182,7 +199,9 @@
 				this.isEndOfList = res.result.data.length < limit ? true : false
 				uni.hideLoading()
 			},
-			// 切换tab事件
+			/**
+			 * @description 切换tab获取申报数据、投放插屏广告
+			 * */
 			changeTabHandle(evt) {
 				tabsIndex = evt.index
 				this.currentIndex = evt.index
@@ -192,7 +211,9 @@
 				this.addInterstitialAd(interstitialAd)
 				// #endif
 			},
-			// 选择栋数获取申报数据
+			/**
+			 * @description 选择楼栋、根据申报状态、楼层、获取申报数据
+			 * */
 			async getApplyDataItem(floor) {
 				uni.showLoading({
 					title: '加载中...',
@@ -200,24 +221,29 @@
 				})
 				const res = await db.collection('dorm_apply').where({
 					floor: floor,
-					status: this.tabList[tabsIndex].status
+					status: this.tabList[tabsIndex].status,
+					openid: uni.getStorageSync('openid')
 				}).orderBy('createTime', 'desc').get()
 				if (res.success) {
 					this.applyData = res.result.data
 				}
 				uni.hideLoading()
 			},
-			// 切换楼层事件
+			/**
+			 * @description 切换楼层获取申报数据
+			 * */
 			changePicker(evt) {
 				floorIndex = evt.index
 				if (floorIndex === 0) {
 					this.applyData = []
 					this.getApplyData()
 				} else {
-					this.getApplyDataItem(floorIndex);
+					this.getApplyDataItem(floorIndex)
 				}
 			},
-			// 获取角色列表
+			/**
+			 * @description 获取角色列表
+			 * */
 			async getUserRole(openid) {
 				const res = await db.collection('dorm_roles').get()
 				if (res.success) {
@@ -226,20 +252,26 @@
 					uni.setStorageSync('isAdmin', this.isAdmin)
 				}
 			},
-			// 获取分享数据
+			/**
+			 * @description 获取分享数据
+			 * */
 			async onShareMessage() {
 				const res = await db.collection('dorm_share').get()
 				if (res.success) {
 					this.shareData = res.result.data[0]
 				}
 			},
-			// 报修申报跳转
+			/**
+			 * @description 报修申报跳转
+			 * */
 			navToPublishPage() {
 				uni.navigateTo({
 					url: '/pages/publish/publish'
 				})
 			},
-			// 管理员跳转
+			/**
+			 * @description 管理员跳转
+			 * */
 			navToAdminPage() {
 				// #ifdef MP-WEIXIN
 				uni.showModal({
@@ -260,12 +292,6 @@
 					})
 					// #endif
 				}
-			},
-			// 复制openid
-			copyOpenid () {
-				uni.setClipboardData({
-					data: uni.getStorageSync('openid')
-				})
 			}
 		}
 	}
