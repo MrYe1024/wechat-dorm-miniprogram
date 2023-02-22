@@ -115,7 +115,7 @@
 					    tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
 					})
 					// #endif
-					wx.showLoading({
+					uni.showLoading({
 						title: '正在提交...',
 						mask: true
 					})

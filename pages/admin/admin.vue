@@ -48,12 +48,11 @@
 
 <script>
 	import mixin from '../../mixins/mixin.js'
-	const db = uniCloud.database();
+	const db = uniCloud.database()
 	const http = uniCloud.importObject('feedbackSubscribeMsg')
-	const limit = 20;
-	let tabsIndex = 0;
-	let floorIndex = 0;
-	var interstitialAd = null;
+	const limit = 20
+	let tabsIndex = 0
+	let floorIndex = 0
 	export default {
 		mixins: [mixin],
 		data() {
@@ -69,7 +68,9 @@
 			!this.isEndOfList && this.getApplyData()
 		},
 		methods: {
-			// 获取申报数据
+			/**
+			 * @description 根据申报状态、楼层、获取申报数据
+			 * */
 			async getApplyData() {
 				uni.showLoading({
 					title: '加载中...',
@@ -83,14 +84,18 @@
 				this.isEndOfList = res.result.data.length < limit ? true : false
 				uni.hideLoading()
 			},
-			// 切换tab事件
+			/**
+			 * @description 切换tab获取申报数据、投放插屏广告
+			 * */
 			changeTabHandle(evt) {
 				tabsIndex = evt.index
 				this.currentIndex = evt.index
 				this.applyData = []
 				this.getApplyData()
 			},
-			// 选择栋数获取申报数据
+			/**
+			 * @description 选择楼栋、根据申报状态、楼层、获取申报数据
+			 * */
 			async getApplyDataItem(floor) {
 				uni.showLoading({
 					title: '加载中...',
@@ -105,7 +110,9 @@
 				}
 				uni.hideLoading()
 			},
-			// 切换楼层事件
+			/**
+			 * @description 切换楼层获取申报数据
+			 * */
 			changePicker(evt) {
 				floorIndex = evt.index
 				if (floorIndex === 0) {
@@ -115,7 +122,9 @@
 					this.getApplyDataItem(floorIndex);
 				}
 			},
-			// 接收订单
+			/**
+			 * @description 接收订单
+			 * */
 			async confirmOrder (event) {
 				if (!this.isAdminValidate()) return
 				uni.showModal({
@@ -146,7 +155,9 @@
 					}
 				})
 			},
-			// 处理完成
+			/**
+			 * @description 完成订单
+			 * */
 			completeOrder (event) {
 				if (!this.isAdminValidate()) return
 				uni.showModal({
@@ -177,7 +188,9 @@
 					}
 				})
 			},
-			// 删除订单
+			/**
+			 * @description 删除订单
+			 * */
 			deleteOrder (event) {
 				if (!this.isAdminValidate()) return
 				uni.showModal({
@@ -198,7 +211,9 @@
 					}
 				})
 			},
-			// 是否为管理员
+			/**
+			 * @description 管理员验证
+			 * */
 			isAdminValidate () {
 				const isAdmin = uni.getStorageSync('isAdmin')
 				if (!isAdmin) {
