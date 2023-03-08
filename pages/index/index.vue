@@ -112,7 +112,6 @@
 					onlyAuthorize: true,
 					provider: 'weixin',
 					success: async res => {
-						console.log(res)
 						const {
 							result
 						} = await uniCloud.callFunction({
