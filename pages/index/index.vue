@@ -44,6 +44,11 @@
 		<view class="footer-view" v-if="applyData.length">
 			<text @click="copyOpenid">@2019-2023 宿舍报修助手</text>
 		</view>
+		<view :class="{'ad-banner': applyData.length === 1}" v-if="applyData.length !== 0">
+			<view>
+				<ad unit-id="adunit-9b214d22ec05f226"></ad>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -297,6 +302,18 @@
 	}
 </script>
 
+<style>
+	page {
+		background-color: #fff;
+	}
+</style>
 <style lang="scss" scoped>
 	@import '../../styles/index.scss';
+	.ad-banner {
+		view {
+			width: 100%;
+			position: fixed;
+			bottom: 0;
+		}
+	}
 </style>

@@ -39,8 +39,9 @@ export default {
 	methods: {
 		// 查看详情
 		navToDetailPage(item) {
+			const isAdmin = this.isAdminPage ? true : false
 			uni.navigateTo({
-				url: '/pages/detail/detail?detail=' + JSON.stringify(item)
+				url: '/pages/detail/detail?detail=' + JSON.stringify(item)+'&isAdmin='+isAdmin
 			})
 		},
 		// 复制openid

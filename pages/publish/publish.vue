@@ -1,35 +1,36 @@
 <template>
 	<view class="container">
 		<!-- 通告栏 -->
-		<view class="notice-container">
+		<view class="header-notice-bar">
 			<uni-notice-bar show-icon scrollable text="请同学们如实填写信息,方便维修人员对应进行维修。请同学们推广使用,谢谢大家。" />
 		</view>
+		<view class="main-form-list">
+			<view class="apply-item">
+				<text>申报人：</text>
+				<input class="in-1" maxlength="6" v-model="formData.name"></input>
+			</view>
 
-		<view class="apply-item">
-			<text>申报人：</text>
-			<input class="in-1" maxlength="6" v-model="formData.name"></input>
-		</view>
+			<view class="apply-item">
+				<text>申报宿舍：</text>
+				<picker @change="selectFloor" :range="pickerList">
+					<view class="picker">
+						<input :disabled="true" class="in-2" type="number" v-model="formData.floor"></input>
+					</view>
+				</picker>
+				<text class="text-dorm">栋</text>
+				<input class="in-3" type="number" maxlength="6" v-model="formData.dorm"></input>
+			</view>
 
-		<view class="apply-item">
-			<text>申报宿舍：</text>
-			<picker @change="selectFloor" :range="pickerList">
-				<view class="picker">
-					<input :disabled="true" class="in-2" type="number" v-model="formData.floor"></input>
-				</view>
-			</picker>
-			<text class="text-dorm">栋</text>
-			<input class="in-3" type="number" maxlength="6" v-model="formData.dorm"></input>
-		</view>
+			<view class="apply-item">
+				<text>联系电话：</text>
+				<input class="in-4" type="number" v-model="formData.phone"></input>
+			</view>
 
-		<view class="apply-item">
-			<text>联系电话：</text>
-			<input class="in-4" type="number" v-model="formData.phone"></input>
-		</view>
-
-		<view class="apply-item apply-desc">
-			<text>申报描述：</text>
-			<textarea class="in-5" placeholder="请说明要维修的情况" placeholder-style="color:#ccc;font-size:14px;" type="string"
-				maxlength="50" v-model="formData.desc"></textarea>
+			<view class="apply-item apply-desc">
+				<text>申报描述：</text>
+				<textarea class="in-5" placeholder="请说明要维修的情况" placeholder-style="color:#ccc;font-size:14px;"
+					type="string" maxlength="50" v-model="formData.desc"></textarea>
+			</view>
 		</view>
 
 		<view class="radio-list">
@@ -50,9 +51,11 @@
 		</view>
 
 		<view class="ad-banner">
-			<ad unit-id="adunit-0280bbad84c78062"></ad>
+			<view>
+				<ad unit-id="adunit-0280bbad84c78062"></ad>
+			</view>
 		</view>
-
+		<view style="height: 160px;"></view>
 	</view>
 </template>
 
@@ -91,6 +94,15 @@
 				}
 			};
 		},
+		onLoad (options) {
+			if (options.detail) {
+				const data = JSON.parse(options.detail)
+				this.formData.name = data.name
+				this.formData.dorm = data.dorm
+				this.formData.floor = data.floor
+				this.formData.phone = data.phone
+			}
+		},
 		methods: {
 			// 选择楼层
 			selectFloor(e) {
@@ -112,7 +124,7 @@
 					// 订阅报修反馈通知
 					// #ifdef MP-WEIXIN
 					wx.requestSubscribeMessage({
-					    tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
+						tmplIds: ['xdcaBq1COut3fsO_YvmrvQKYrgDrKmMaR-EwbmvH-VU'],
 					})
 					// #endif
 					uni.showLoading({
@@ -129,7 +141,7 @@
 						})
 						setTimeout(() => {
 							uni.reLaunch({
-							    url: '../index/index?id=success',
+								url: '../index/index?id=success',
 							})
 						}, 1200)
 					})
@@ -192,11 +204,7 @@
 	}
 </script>
 
-<style>
-	.notice-container {
-		margin-bottom: 20rpx;
-	}
-
+<style lang="scss" scoped>
 	input,
 	textarea {
 		background-color: #f6f6f6;
@@ -204,66 +212,77 @@
 		color: #969799;
 	}
 
-	.apply-item {
-		padding: 20rpx;
-		margin-bottom: 20rpx;
-		display: flex;
-		align-items: center;
-		background-color: #fff;
-	}
+	.container {
+		.header-notice-bar {
+			margin-bottom: 20rpx;
+		}
 
-	.in-1,
-	.in-4 {
-		width: 250rpx;
-		border-radius: 10rpx;
-		text-align: center;
-	}
+		.main-form-list {
+			.apply-item {
+				padding: 20rpx;
+				margin-bottom: 20rpx;
+				display: flex;
+				align-items: center;
+				background-color: #fff;
 
-	.text-dorm {
-		margin: 0 20rpx;
-	}
+				.in-1,
+				.in-4 {
+					width: 250rpx;
+					border-radius: 10rpx;
+					text-align: center;
+				}
 
-	.in-2,
-	.in-3 {
-		width: 120rpx;
-		border-radius: 10rpx;
-		text-align: center;
-	}
+				.text-dorm {
+					margin: 0 20rpx;
+				}
 
-	.apply-desc {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		background-color: #fff;
-	}
+				.in-2,
+				.in-3 {
+					width: 120rpx;
+					border-radius: 10rpx;
+					text-align: center;
+				}
 
-	.apply-desc>text {
-		margin-bottom: 20rpx;
-	}
+				.in-5 {
+					border-radius: 10rpx;
+					height: 150rpx;
+					width: 100%;
+				}
+			}
 
-	.in-5 {
-		border-radius: 10rpx;
-		height: 150rpx;
-		width: 100%;
-	}
+			.apply-desc {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				background-color: #fff;
+			}
 
-	.apply-btn {
-		width: 80%;
-		margin: 100rpx auto 0 auto;
-	}
+			.apply-desc>text {
+				margin-bottom: 20rpx;
+			}
+		}
 
-	.radio-list {
-		background-color: #fff;
-	}
+		.apply-btn {
+			width: 80%;
+			margin: 100rpx auto 0 auto;
+		}
 
-	.radio-list__item {
-		display: flex;
-		justify-content: space-between;
-		padding: 20rpx;
-	}
+		.radio-list {
+			background-color: #fff;
+		}
 
-	.ad-banner {
-		margin-top: 100rpx;
-		width: 100%;
+		.radio-list__item {
+			display: flex;
+			justify-content: space-between;
+			padding: 20rpx;
+		}
+		
+		.ad-banner {
+			view {
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+			}
+		}
 	}
 </style>

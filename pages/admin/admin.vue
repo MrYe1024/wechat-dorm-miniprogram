@@ -57,7 +57,7 @@
 		mixins: [mixin],
 		data() {
 			return {
-
+				isAdminPage: true
 			}
 		},
 		onLoad(options) {
@@ -228,6 +228,11 @@
 	}
 </script>
 
+<style>
+	page {
+		background-color: #fff;
+	}
+</style>
 <style lang="scss" scoped>
 	@import '../../styles/index.scss';
 </style>

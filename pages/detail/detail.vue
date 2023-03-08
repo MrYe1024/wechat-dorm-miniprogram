@@ -1,44 +1,56 @@
 <template>
 	<view class="container">
-		<view class='apply-table'>
-			<view class='apply-title'>申报表</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报人：</view>
-				<view class="item-content">{{user.name}}</view>
-			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报宿舍：</view>
-				<view class="item-content">{{user.floor}}栋{{user.dorm}}</view>
-			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">联系电话：</view>
-				<view class="item-content">{{user.phone}}</view>
-				<view class="contact-phone-footer">
-					<text @click="callApplyPhone">一键联系</text>
-					<text @click="copyApplyPhone">一键复制</text>
+		<view class="header-status-card">
+			<text class="dot" :style="[{background: applyStatusColor}]"></text>
+			<text>您的申报的报修信息<text v-if="applyStatusText">{{applyStatusText}}</text></text>
+		</view>
+		<view class="main-detail-list">
+			<view class="content-view border-bottom">
+				<view class="label-item">
+					<text class="title">申报人：</text>
+					<text>{{user.name}}</text>
+				</view>
+				<view class="label-item">
+					<text class="title">申报宿舍：</text>
+					<text>{{user.floor}}栋{{user.dorm}}</text>
+				</view>
+				<view class="label-item">
+					<text class="title">申报描述：</text>
+					<text>{{user.desc}}</text>
+				</view>
+				<view class="label-item">
+					<text class="title">申报级别：</text>
+					<text>{{user.level === 1 ? '普通维修' : '紧急维修'}}</text>
+				</view>
+				<view class="label-item">
+					<text class="title">联系电话：</text>
+					<text>{{user.phone}}</text>
+					<text class="copy-btn" @click="copyApplyPhone">复制</text>
+				</view>
+				<view class="label-item">
+					<text class="title">申报日期：</text>
+					<text>{{user.createTime}}</text>
 				</view>
 			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报描述：</view>
-				<view class="item-content">{{user.desc}}</view>
+			<view class="footer-view">
+				<view v-if="isAdmin" class="actions-item item-1" @click="callApplyPhone">
+					<text>一键联系</text>
+				</view>
+				<view v-if="(!isAdmin && user.status === 0)" class="actions-item item-2" @click="cancelApply">
+					<text>撤销申请</text>
+				</view>
+				<view v-if="(!isAdmin && user.status === 1)" class="actions-item item-3">
+					<text style="color: #999;">处理中无法撤销申请</text>
+				</view>
+				<view v-if="(!isAdmin && user.status === 2)" class="actions-item item-4">
+					<text style="color: #07c160;" @click="againApply">再次申报</text>
+				</view>
 			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报级别：</view>
-				<view class="item-content">{{user.level === 1 ? '普通维修' : '紧急维修'}}</view>
-			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报状态：</view>
-				<view class="item-content">{{applyStatus()}}</view>
-			</view>
-			<view class="apply-item">
-				<view class="apply-item-title">申报日期：</view>
-				<view class="item-content">{{user.createTime}}</view>
-			</view>
-			<image src='../../static/images/bi.png' class="header-icon"></image>
 		</view>
-
 		<view class="ad-banner">
-			<ad unit-id="adunit-0280bbad84c78062"></ad>
+			<view>
+				<ad unit-id="adunit-b9a4247f4e2f2672"></ad>
+			</view>
 		</view>
 	</view>
 </template>
@@ -48,7 +60,9 @@
 		data() {
 			return {
 				user: null,
-				isAdmin: false
+				isAdmin: false,
+				applyStatusText: null,
+				applyStatusColor: '#e43d33'
 			}
 		},
 		onLoad(options) {
@@ -57,13 +71,49 @@
 				this.applyStatus(this.user.status)
 			}
 			if (options.isAdmin) {
-				this.isAdmin = options.isAdmin
+				this.isAdmin = JSON.parse(options.isAdmin)
 			}
 		},
 		methods: {
-			applyStatus (status) {
-				return Number(status) === 0 ? '未处理'
-				: Number(status) === 1 ? '处理中' : '已完成'
+			applyStatus(status) {
+				this.applyStatusText = Number(status) === 0 ? '正在等待处理' :
+					Number(status) === 1 ? '正在处理中' : '已完成'
+				this.applyStatusColor = Number(status) === 0 ? '#e43d33' :
+					Number(status) === 1 ? '#f3a73f' : '#18bc37'
+			},
+			// 撤销申请
+			cancelApply () {
+				uni.showModal({
+				    title: '温馨提示',
+				    content: '是否撤销申请该订单?',
+				    success: async (res) => {
+						if (res.confirm) {
+							const result = await db.collection('dorm_apply').where({
+								_id: this.user._id
+							}).update({
+								status: 3
+							})
+							if (result.success) {
+								uni.showToast({
+									title: '撤销成功',
+									icon: 'success',
+									duration: 1000
+								})
+								setTimeout(() => {
+									uni.reLaunch({
+										url: '/pages/index/index'
+									})
+								}, 1100)
+							}
+						}
+					}
+				})
+			},
+			// 再次申报
+			againApply () {
+				uni.navigateTo({
+					url: '/pages/publish/publish?detail='+JSON.stringify(this.user)
+				})
 			},
 			// 一键联系
 			callApplyPhone() {
@@ -80,67 +130,79 @@
 		}
 	}
 </script>
-
 <style>
 	page {
 		background-color: #fff;
 	}
+</style>
+<style lang="scss" scoped>
+	.container {
+		padding: 30rpx;
 
-	.apply-table {
-		background-color: #fbf7ed;
-		margin: 20rpx;
-		border-radius: 10rpx;
-		padding: 40rpx 0;
-		position: relative;
-		min-height: 800rpx;
-	}
+		.header-status-card {
+			height: 80rpx;
+			line-height: 80rpx;
+			background-color: #fff;
+			box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.08);
+			padding: 0 30rpx;
 
-	.apply-title {
-		font-size: 2em;
-		text-align: center;
-	}
+			.dot {
+				display: inline-block;
+				width: 20rpx;
+				height: 20rpx;
+				border-radius: 50%;
+				margin-right: 10rpx;
+			}
+		}
 
-	.apply-item {
-		background-color: #fff;
-		margin: 20rpx;
-		padding: 20rpx;
-		border-radius: 4rpx;
-	}
-
-	.apply-item-title {
-		font-size: 32rpx;
-	}
-
-	.item-content {
-		padding-top: 8rpx;
-		color: #ee0a24;
-	}
-
-	.header-icon {
-		width: 100rpx;
-		height: 100rpx;
-		position: absolute;
-		right: 40rpx;
-		top: 20rpx;
-	}
-
-	.contact-phone-footer {
-		display: flex;
-		justify-content: space-between;
-		padding: 10rpx 0;
-		font-size: 28rpx;
-	}
-
-	.contact-phone-footer>text {
-		flex: 1;
-		text-align: center;
-	}
-
-	.contact-phone-footer>text:nth-child(1) {
-		color: #07c160;
-	}
-
-	.contact-phone-footer>text:nth-child(2) {
-		color: #1989fa;
+		.main-detail-list {
+			background-color: #fff;
+			box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.08);
+			
+			.content-view {
+				padding: 30rpx;
+				position: relative;
+				.label-item {
+					padding: 10rpx 0;
+				
+					.title {
+						color: #999;
+					}
+					
+					.copy-btn {
+						font-size: 26rpx;
+						color: #1989fa;
+						padding: 0 20rpx;
+					}
+				}
+			}
+			
+			.footer-view {
+				display: flex;
+				font-size: 28rpx;
+				padding: 30rpx 0;
+				.actions-item {
+					display: flex;
+					flex: 1;
+					align-items: center;
+					justify-content: center;
+				}
+				.item-1 {
+					color: #07c160;
+				}
+				.item-2 {
+					color: #e43d33;
+				}
+			}
+		}
+		
+		.ad-banner {
+			margin: -30rpx;
+			view {
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+			}
+		}
 	}
 </style>
