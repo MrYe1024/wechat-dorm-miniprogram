@@ -25,6 +25,12 @@
 			"enablePullDownRefresh": false
 		}
 
+	}, {
+		"path": "pages/login/login",
+		"style": {
+			"navigationStyle": "custom"
+		}
+
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

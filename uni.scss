@@ -26,6 +26,24 @@
 }
 /* 颜色变量 */
 
+@mixin flex-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+@mixin flex-box-column {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+/* 主色 */
+$color-primary: #04dae8;
+$color-white: #fff;
+$color-block: #000000;
+$color-second-text: #888888;
+
 /* 行为相关颜色 */
 $uni-color-primary: #007aff;
 $uni-color-success: #4cd964;
