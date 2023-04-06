@@ -4,10 +4,12 @@ import App from './App'
 import Vue from 'vue'
 import store from './store'
 import { http } from '@/service/index.js'
+import { moment } from './utils/moment.js'
 import uView from 'uni_modules/uview-ui'
 Vue.use(uView)
 
 Vue.prototype.$http = http
+Vue.prototype.$moment = moment
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({

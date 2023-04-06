@@ -68,10 +68,6 @@
 </template>
 
 <script>
-	import {
-		univerify
-	} from '@/common/univerify.js'
-	import { userService } from '@/service/modules/login.js'
 	export default {
 		data() {
 			return {
