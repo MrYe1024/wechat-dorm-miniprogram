@@ -11,7 +11,7 @@
 					<view class="left">
 						<text>账号</text>
 					</view>
-					<input type="text" v-model="formData.username" placeholder-class="placeholder" placeholder="请输入账号" />
+					<input type="text" v-model="formData.username" placeholder-class="placeholder" placeholder="账号/手机号/邮箱" />
 				</view>
 				<view class="input-box border-bottom">
 					<view class="left">
@@ -43,7 +43,7 @@
 				<view class=" button login" :style="{opacity: formEmpty ? 1 : .6}" @click="loginHandle">登录</view>
 			</view>
 		</view>
-		<view class="login-type-body" :style="{top: $windowHeight - 140 + 'px'}">
+		<view v-if="false" class="login-type-body" :style="{top: $windowHeight - 140 + 'px'}">
 			<view class="list">
 				<block v-for="(item, index) in loginList" :key="index">
 					<view class="item" v-if="item.isShow" @click="changeLoginType(item)">
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+	const db = uniCloud.database()
 	export default {
 		data() {
 			return {
@@ -81,7 +82,7 @@
 					icon: '',
 					isShow: false
 				}],
-				loginType: '验证码',
+				loginType: '密码',
 				formData: {
 					phone: '',
 					password: '',
@@ -96,7 +97,9 @@
 		computed: {
 			gradientStyle() {
 				const gStyle =
-					`background: ${this.gradient.gradientType}-gradient(${this.gradient.colorRotation}deg, ${this.gradient.colorA} ${this.gradient.colorWidthOne}%, ${this.gradient.colorB} ${this.gradient.colorWidthTow}%);background-attachment:fixed;min-height:100vh;`
+					`background: ${this.gradient.gradientType}-gradient(${this.gradient.colorRotation}deg, 
+					${this.gradient.colorA} ${this.gradient.colorWidthOne}%, ${this.gradient.colorB} ${this.gradient.colorWidthTow}%);
+					background-attachment:fixed;min-height:100vh;`
 				return gStyle;
 			},
 			/* 登录 */
@@ -143,7 +146,9 @@
 					this.$utils.showToast('验证码错误', 1000)
 				}
 			},
-			/* 账号密码登录 */
+			/**
+			 * @description 账号密码登录
+			 */
 			loginByPassword() {
 				if(this.formEmpty) {
 					if(!this.isAgree) {

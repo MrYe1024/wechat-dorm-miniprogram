@@ -10,6 +10,16 @@ Vue.use(uView)
 
 Vue.prototype.$http = http
 Vue.prototype.$moment = moment
+Vue.prototype.$windowHeight = uni.getSystemInfoSync().windowHeight
+Vue.prototype.$windowWidth = uni.getSystemInfoSync().windowWidth
+Vue.prototype.gradient = {
+	colorA: "#04dae8",
+	colorB: "#4958dd",
+	colorRotation: 45,
+	colorWidthOne: 0,
+	colorWidthTow: 100,
+	gradientType: "linear"
+}
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
