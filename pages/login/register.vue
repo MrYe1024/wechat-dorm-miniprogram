@@ -1,7 +1,27 @@
 <template>
-	<view>
-		<button @click="registerHandle">注册</button>
-		<button @click="getUserInfoByUsername">查询用户</button>
+	<view class="register-container">
+		<view class="banner-view">
+			<text>设置账号信息</text>
+		</view>
+		<view class="form-card-view">
+			<view class="form-item">
+				<text class="title">账号：</text>
+				<input type="text" v-model="formData.username" @blur="getUserInfoByUsername('blur')" @input="getUserInfoByUsername('input')" placeholder="名字/手机号/邮箱">
+				<text class="tips" v-if="isExistUser">账号已注册</text>
+			</view>
+			<view class="form-item">
+				<text class="title">设置密码：</text>
+				<input type="password" v-model="formData.password" placeholder="请输入密码">
+			</view>
+			<view class="form-item">
+				<text class="title">确认密码：</text>
+				<input type="password" v-model="confirmPwd" @blur="checkPassword('blur')" @input="checkPassword('input')" placeholder="请再次输入密码">
+				<text class="tips" v-if="!isPwdPass">密码错误</text>
+			</view>
+		</view>
+		<view class="submit-btn-view">
+			<button class="format-button" @click="registerHandle">注册</button>
+		</view>
 	</view>
 </template>
 
@@ -13,36 +33,73 @@
 				formData: {
 					username: '15113624648',
 					password: 'a123456',
-					nickname: '',
-					avatar: '',
-					age: '',
+					nickname: 'aYuan',
+					avatar: 'https://picsum.photos/100/100',
+					age: '1997',
+					status: 1,
 					sex: 0,
 					createTime: this.$moment('YYYY-MM-DD hh:mm:ss')
-				}
+				},
+				isExistUser: false, // 用户是否已存在
+				isPwdPass: true, // 确认密码校验
+				confirmPwd: null // 确认密码
 			};
 		},
 		onLoad() {
-			console.log(this.validateForm())
+			// console.log(this.getUserInfoByUsername())
 		},
 		methods: {
 			/** 
 			 * @description 注册用户
 		     * */
 			async registerHandle() {
-				if (this.validateForm()) {
+				if (this.validateForm() && !this.isExistUser && this.checkPassword()) {
+					uni.showLoading({
+						title: '注册中...',
+						mask: true
+					})
 					const res = await db.collection('dorm_users').add(this.formData)
-					console.log(res)
+					uni.hideLoading()
+					if (res.success) {
+						uni.showToast({
+							title: '注册成功',
+							icon: 'success',
+							duration: 1500
+						})
+						setTimeout(() => {
+							uni.reLaunch({
+								url: '/pages/login/login'
+							})
+						}, 1500)
+					}
 				}
 			},
 			/**
 			 * @description 根据用户名查询用户信息
-			 * @return {number}
 			 */
-			async getUserInfoByUsername() {
-				const res = await db.collection('dorm_users').where({
-					username: this.formData.username
-				}).get()
-				return Number(res.result.data.length)
+			async getUserInfoByUsername(evt) {
+				if (evt === 'input') {
+					this.isExistUser = false
+				}
+				if (evt === 'blur' && this.formData.username) {
+					const res = await db.collection('dorm_users').where({
+						username: this.formData.username
+					}).get()
+					Number(res.result.data.length) === 0 ? this.isExistUser = false : this.isExistUser = true
+				}
+			},
+			/**
+			 * @description 确认密码对比检查
+			 * @return {boolean}
+			 */
+			checkPassword(evt) {
+				if (evt === 'input') {
+					this.isPwdPass = true
+				}
+				if (evt === 'blur' && this.confirmPwd) {
+					this.formData.password === this.confirmPwd ? this.isPwdPass = true : this.isPwdPass = false
+				}
+				return this.formData.password === this.confirmPwd
 			},
 			/**
 			 * @description 表单验证
@@ -102,6 +159,48 @@
 	}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+.register-container {
+	.banner-view {
+		background-color: #00b7ff;
+		height: 200rpx;
+		font-size: 50rpx;
+		color: #fff;
+		position: relative;
+		text {
+			position: absolute;
+			left: 30rpx;
+			bottom: 30rpx;
+		}
+	}
+	.form-card-view {
+		background-color: #fff;
+		padding: 30rpx;
+		.form-item {
+			margin-bottom: 30rpx;
+			.title {
+				font-size: 32rpx;
+				display: inline-block;
+				margin-bottom: 10rpx;
+			}
+			input {
+				padding: 20rpx 20rpx;
+				background: #e0e7ec;
+			}
+			.tips {
+				font-size: 24rpx;
+				color: #dd524d;
+			}
+		}
+	}
+	.submit-btn-view {
+		padding: 30rpx;
+		button {
+			background-color: #00b7ff;
+			padding: 20rpx;
+			font-size: 32rpx;
+			color: #fff;
+		}
+	}
+}
 </style>
