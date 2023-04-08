@@ -31,11 +31,11 @@
 		data() {
 			return {
 				formData: {
-					username: '15113624648',
-					password: 'a123456',
-					nickname: 'aYuan',
-					avatar: 'https://picsum.photos/100/100',
-					age: '1997',
+					username: '',
+					password: '',
+					nickname: 'dorm'+Math.floor(Math.random()*10000),
+					avatar: 'https://mp-e93e0c5f-05cf-4713-9d34-a6449768f5b0.cdn.bspapp.com/cloudstorage/71400b1d-68f8-44ed-8cf5-c76f1450c0de.png',
+					age: this.$moment('YYYY-MM-DD'),
 					status: 1,
 					sex: 0,
 					createTime: this.$moment('YYYY-MM-DD hh:mm:ss')
@@ -46,7 +46,7 @@
 			};
 		},
 		onLoad() {
-			// console.log(this.getUserInfoByUsername())
+			
 		},
 		methods: {
 			/** 
@@ -59,6 +59,7 @@
 						mask: true
 					})
 					const res = await db.collection('dorm_users').add(this.formData)
+					uni.setStorageSync('userId', res.result.id)
 					uni.hideLoading()
 					if (res.success) {
 						uni.showToast({
@@ -68,7 +69,7 @@
 						})
 						setTimeout(() => {
 							uni.reLaunch({
-								url: '/pages/login/login'
+								url: '/pages/index/index'
 							})
 						}, 1500)
 					}

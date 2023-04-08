@@ -2,8 +2,8 @@
 	<page-meta :page-style="gradientStyle"></page-meta>
 	<view class="page-container">
 		<view class="logo-body">
-			<u-image height="150rpx" width="150" src="https://zjjm.oss-cn-shenzhen.aliyuncs.com/images/avatar/robot.png"></u-image>
-			<text>知交联盟</text>
+			<image mode="widthFix" class="logo-img" src="https://mp-e93e0c5f-05cf-4713-9d34-a6449768f5b0.cdn.bspapp.com/cloudstorage/8ba48d08-0199-4436-8c17-bd855c5748c6.png"></image>
+			<text>宿舍报修助手</text>
 		</view>
 		<view class="login-body">
 			<view class="login login-1" v-if="loginType === '密码'">
@@ -41,6 +41,7 @@
 			</view>
 			<view class="button-box" v-if="loginType === '密码' || loginType === '验证码'">
 				<view class=" button login" :style="{opacity: formEmpty ? 1 : .6}" @click="loginHandle">登录</view>
+				<view class=" button register" @click="navRegisterPage">注册</view>
 			</view>
 		</view>
 		<view v-if="false" class="login-type-body" :style="{top: $windowHeight - 140 + 'px'}">
@@ -149,23 +150,47 @@
 			/**
 			 * @description 账号密码登录
 			 */
-			loginByPassword() {
+			async loginByPassword() {
 				if(this.formEmpty) {
 					if(!this.isAgree) {
-						this.$utils.showToast('请先阅读并同意协议')
+						uni.showToast({
+							title: '请先阅读并同意协议',
+							icon: 'none'
+						})
 						return false
 					}
-					userService.loginUsername({
-						username: this.formData.username,
-						password: this.formData.password
-					}).then(res => {
-						if(res.data.code === 0) {
-							this.loginSuccess(res)
-						}else {
-							this.$utils.showToast('登录失败', 1000, 'error')
+					const res = await db.collection('dorm_users').where({
+						username: this.formData.username
+					}).get()
+					if (res.result.data.length === 0) {
+						uni.showToast({
+							title: '账号不存在请先注册',
+							icon: 'none'
+						})
+					} else {
+						const result = res.result.data
+						const index = result.findIndex(item => item.password === this.formData.password)
+						if (index !== -1) {
+							uni.setStorageSync('userId', result[index]._id)
+							uni.reLaunch({
+								url: '/pages/index/index'
+							})
+						} else {
+							uni.showToast({
+								title: '密码错误',
+								icon: 'error'
+							})
 						}
-					})
+					}
 				}
+			},
+			/**
+			 * @description 跳转去注册
+			 */
+			navRegisterPage() {
+				uni.navigateTo({
+					url: '/pages/login/register'
+				})
 			},
 			/* 一键登录 */
 			univerifyLogin() {
@@ -296,7 +321,9 @@
 		.logo-body {
 			padding-top: 160rpx;
 			@extend .flex-box-column;
-
+			.logo-img {
+				width: 150rpx;
+			}
 			text {
 				font-size: 50rpx;
 				padding: 10rpx 0;
@@ -359,7 +386,7 @@
 				}
 
 				.register {
-					background-color: #18B566;
+					background-color: #2d8ce1;
 				}
 			}
 		}
