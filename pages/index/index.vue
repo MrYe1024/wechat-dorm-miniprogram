@@ -80,6 +80,9 @@
 				this.addInterstitialAd(interstitialAd)
 			}
 			// #endif
+			// #ifdef APP-PLUS
+			this.validateLogin()
+			// #endif
 		},
 		// 触底刷新
 		onReachBottom() {
@@ -104,6 +107,17 @@
 			}
 		},
 		methods: {
+			/**
+			 * @description APP登录状态检测
+			 */
+			validateLogin () {
+				const userId = uni.getStorageSync('userId')
+				if (!userId) {
+					uni.reLaunch({
+						url: '/pages/login/login'
+					})
+				}
+			},
 			/**
 			 * @description 调用云函数获取用户openid
 			 * */

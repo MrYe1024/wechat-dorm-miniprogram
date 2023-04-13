@@ -81,6 +81,7 @@
 					27, 28, 29, 30
 				],
 				formData: {
+					userId: uni.getStorageSync('userId') || null,
 					name: null,
 					desc: null,
 					dorm: null,
@@ -90,7 +91,7 @@
 					phone: null,
 					openid: uni.getStorageSync('openid'),
 					createTime: moment('YYYY-MM-DD hh:mm:ss'),
-					status: 0
+					status: 0 // 0 未处理，1 处理中，2 已处理
 				}
 			};
 		},
