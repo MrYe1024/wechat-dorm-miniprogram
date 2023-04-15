@@ -39,7 +39,7 @@
 					<label class="radio-list__item">
 						<view>{{item.name}}</view>
 						<view>
-							<radio :value="item.value" :checked="index === (formData.level - 1)" />
+							<radio :value="item.value + ''" :checked="index === (Number(formData.level) - 1)" />
 						</view>
 					</label>
 				</block>

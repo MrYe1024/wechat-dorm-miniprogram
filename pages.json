@@ -2,27 +2,36 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "宿舍报修助手"
+			"navigationBarTitleText": "宿舍报修助手",
+			// #ifdef H5
+			"navigationStyle": "custom"
+			// #endif
 		}
 	}, {
 		"path": "pages/publish/publish",
 		"style": {
 			"navigationBarTitleText": "申报申请",
-			"enablePullDownRefresh": false
+			// #ifdef H5
+			"navigationStyle": "custom"
+			// #endif
 		}
 
 	}, {
 		"path": "pages/admin/admin",
 		"style": {
 			"navigationBarTitleText": "申报管理",
-			"enablePullDownRefresh": false
+			// #ifdef H5
+			"navigationStyle": "custom"
+			// #endif
 		}
 
 	}, {
 		"path": "pages/detail/detail",
 		"style": {
 			"navigationBarTitleText": "申报详情",
-			"enablePullDownRefresh": false
+			// #ifdef H5
+			"navigationStyle": "custom"
+			// #endif
 		}
 
 	}, {
@@ -30,31 +39,27 @@
 		"style": {
 			"navigationStyle": "custom"
 		}
-
-	}    ,{
-            "path" : "pages/login/register",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "用户注册",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	}, {
+		"path": "pages/login/register",
+		"style": {
+			"navigationBarTitleText": "用户注册",
+			// #ifdef H5
+			"navigationStyle": "custom"
+			// #endif
+		}
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "宿舍报修助手",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"condition" : { //模式配置，仅开发期间生效
+	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "登录", //模式名称
-				"path": "pages/login/login", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
+		"list": [{
+			"name": "登录", //模式名称
+			"path": "pages/login/login", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }

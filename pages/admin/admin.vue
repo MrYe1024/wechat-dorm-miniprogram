@@ -23,7 +23,7 @@
 						<view class="content__right">
 							<text class="floor">{{item.floor}}栋{{item.dorm}}</text>
 							<text class="desc">{{item.desc}}</text>
-							<uni-tag size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
+							<uni-tag style="width: fit-content;" size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
 							<text class="date">{{item.createTime}}</text>
 						</view>
 					</view>
@@ -105,9 +105,7 @@
 					floor: floor,
 					status: this.tabList[tabsIndex].status
 				}).orderBy('createTime', 'desc').get()
-				if (res.success) {
-					this.applyData = res.result.data
-				}
+				this.applyData = res.result.data
 				uni.hideLoading()
 			},
 			/**

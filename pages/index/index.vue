@@ -27,7 +27,7 @@
 						<view class="content__right">
 							<text class="floor">{{item.floor}}栋{{item.dorm}}</text>
 							<text class="desc">{{item.desc}}</text>
-							<uni-tag size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
+							<uni-tag style="width: fit-content;" size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
 							<text class="date">{{item.createTime}}</text>
 						</view>
 					</view>
@@ -80,7 +80,7 @@
 				this.addInterstitialAd(interstitialAd)
 			}
 			// #endif
-			// #ifdef APP-PLUS
+			// #ifndef MP-WEIXIN
 			this.validateLogin()
 			// #endif
 		},
@@ -211,8 +211,10 @@
 				const res = await db.collection('dorm_apply').where({
 					status: this.tabList[tabsIndex].status,
 					floor: floorIndex === 0 ? {} : floorIndex,
-					openid: uni.getStorageSync('openid')
+					openid: uni.getStorageSync('openid'),
+					userId: uni.getStorageSync('userId')
 				}).skip(this.applyData.length).orderBy('createTime', 'desc').get()
+				console.log(res)
 				this.applyData = [...this.applyData, ...res.result.data]
 				this.isEndOfList = res.result.data.length < limit ? true : false
 				uni.hideLoading()
@@ -240,11 +242,10 @@
 				const res = await db.collection('dorm_apply').where({
 					floor: floor,
 					status: this.tabList[tabsIndex].status,
-					openid: uni.getStorageSync('openid')
+					openid: uni.getStorageSync('openid'),
+					userId: uni.getStorageSync('userId')
 				}).orderBy('createTime', 'desc').get()
-				if (res.success) {
-					this.applyData = res.result.data
-				}
+				this.applyData = res.result.data
 				uni.hideLoading()
 			},
 			/**
@@ -275,9 +276,7 @@
 			 * */
 			async onShareMessage() {
 				const res = await db.collection('dorm_share').get()
-				if (res.success) {
-					this.shareData = res.result.data[0]
-				}
+				this.shareData = res.result.data[0]
 			},
 			/**
 			 * @description 报修申报跳转
@@ -300,6 +299,11 @@
 							this.addRewardedVideoAd()
 						}
 					}
+				})
+				// #endif
+				// #ifndef MP-WEIXIN
+				uni.navigateTo({
+					url: '/pages/admin/admin'
 				})
 				// #endif
 				if (this.isAdmin) {
