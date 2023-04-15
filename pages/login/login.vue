@@ -109,14 +109,14 @@
 			}
 		},
 		onLoad() {
-			// #ifdef APP-PLUS
-			this.univerifyLogin()
-			this.loginList.push({
-				name: '一键登录',
-				icon: 'phone',
-				isShow: true
-			})
-			// #endif
+			// // #ifdef APP-PLUS
+			// this.univerifyLogin()
+			// this.loginList.push({
+			// 	name: '一键登录',
+			// 	icon: 'phone',
+			// 	isShow: true
+			// })
+			// // #endif
 		},
 		methods: {
 			/* 登录 */

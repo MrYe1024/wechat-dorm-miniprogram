@@ -2,35 +2,35 @@
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "宿舍报修助手",
+			"navigationBarTitleText": "宿舍报修助手"
 			// #ifdef H5
-			"navigationStyle": "custom"
+			,"navigationStyle": "custom"
 			// #endif
 		}
 	}, {
 		"path": "pages/publish/publish",
 		"style": {
-			"navigationBarTitleText": "申报申请",
+			"navigationBarTitleText": "申报申请"
 			// #ifdef H5
-			"navigationStyle": "custom"
+			,"navigationStyle": "custom"
 			// #endif
 		}
 
 	}, {
 		"path": "pages/admin/admin",
 		"style": {
-			"navigationBarTitleText": "申报管理",
+			"navigationBarTitleText": "申报管理"
 			// #ifdef H5
-			"navigationStyle": "custom"
+			,"navigationStyle": "custom"
 			// #endif
 		}
 
 	}, {
 		"path": "pages/detail/detail",
 		"style": {
-			"navigationBarTitleText": "申报详情",
+			"navigationBarTitleText": "申报详情"
 			// #ifdef H5
-			"navigationStyle": "custom"
+			,"navigationStyle": "custom"
 			// #endif
 		}
 
@@ -42,9 +42,9 @@
 	}, {
 		"path": "pages/login/register",
 		"style": {
-			"navigationBarTitleText": "用户注册",
+			"navigationBarTitleText": "用户注册"
 			// #ifdef H5
-			"navigationStyle": "custom"
+			,"navigationStyle": "custom"
 			// #endif
 		}
 	}],
