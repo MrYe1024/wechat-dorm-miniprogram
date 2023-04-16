@@ -27,7 +27,8 @@
 						<view class="content__right">
 							<text class="floor">{{item.floor}}栋{{item.dorm}}</text>
 							<text class="desc">{{item.desc}}</text>
-							<uni-tag style="width: fit-content;" size="mini" :text="applyStatus(item.status)" :type="tagType(item.status)" />
+							<uni-tag style="width: fit-content;" size="mini" :text="applyStatus(item.status)"
+								:type="tagType(item.status)" />
 							<text class="date">{{item.createTime}}</text>
 						</view>
 					</view>
@@ -80,6 +81,7 @@
 				this.addInterstitialAd(interstitialAd)
 			}
 			// #endif
+			// APP登录状态检测
 			// #ifndef MP-WEIXIN
 			this.validateLogin()
 			// #endif
@@ -110,7 +112,7 @@
 			/**
 			 * @description APP登录状态检测
 			 */
-			validateLogin () {
+			validateLogin() {
 				const userId = uni.getStorageSync('userId')
 				if (!userId) {
 					uni.reLaunch({
@@ -130,7 +132,7 @@
 							result
 						} = await uniCloud.callFunction({
 							name: 'getUserOpenId',
-							data: {
+							data: { 
 								code: res.code
 							}
 						})
@@ -156,23 +158,23 @@
 			/**
 			 * @description 初始化激励广告
 			 * */
-			createRewardedVideoAd () {
+			createRewardedVideoAd() {
 				if (wx.createRewardedVideoAd) {
-				  videoAd = wx.createRewardedVideoAd({
-				    adUnitId: 'adunit-cbebfbb7e560c89c'
-				  })
-				  videoAd.onLoad(() => {
-					  console.log('激励广告初始化成功')
-				  })
-				  videoAd.onError((err) => {})
-				  videoAd.onClose((res) => {
-					  if (res.isEnded) {
-						  uni.navigateTo({
-						  	url: '/pages/admin/admin'
-						  })
-					  }
-					  console.log('广告已关闭')
-				  })
+					videoAd = wx.createRewardedVideoAd({
+						adUnitId: 'adunit-cbebfbb7e560c89c'
+					})
+					videoAd.onLoad(() => {
+						console.log('激励广告初始化成功')
+					})
+					videoAd.onError((err) => {})
+					videoAd.onClose((res) => {
+						if (res.isEnded) {
+							uni.navigateTo({
+								url: '/pages/admin/admin'
+							})
+						}
+						console.log('广告已关闭')
+					})
 				}
 			},
 			/**
@@ -188,20 +190,20 @@
 			/**
 			 * @description 投放激励广告
 			 * */
-			addRewardedVideoAd () {
+			addRewardedVideoAd() {
 				if (videoAd) {
-				  videoAd.show().catch(() => {
-				    // 失败重试
-				    videoAd.load()
-				      .then(() => videoAd.show())
-				      .catch(err => {
-				        console.log('激励视频 广告显示失败')
-				      })
-				  })
+					videoAd.show().catch(() => {
+						// 失败重试
+						videoAd.load()
+							.then(() => videoAd.show())
+							.catch(err => {
+								console.log('激励视频 广告显示失败')
+							})
+					})
 				}
 			},
 			/**
-			 * @description 根据申报状态、楼层、获取申报数据
+			 * @description 获取全部宿舍申报数据
 			 * */
 			async getApplyData() {
 				uni.showLoading({
@@ -211,8 +213,12 @@
 				const res = await db.collection('dorm_apply').where({
 					status: this.tabList[tabsIndex].status,
 					floor: floorIndex === 0 ? {} : floorIndex,
-					openid: uni.getStorageSync('openid'),
+					// #ifdef MP-WEIXIN
+					openid: uni.getStorageSync('openid')
+					// #endif
+					// #ifndef MP-WEIXIN
 					userId: uni.getStorageSync('userId')
+					// #endif
 				}).skip(this.applyData.length).orderBy('createTime', 'desc').get()
 				console.log(res)
 				this.applyData = [...this.applyData, ...res.result.data]
@@ -232,7 +238,7 @@
 				// #endif
 			},
 			/**
-			 * @description 选择楼栋、根据申报状态、楼层、获取申报数据
+			 * @description 切换楼栋获取宿舍申报数据
 			 * */
 			async getApplyDataItem(floor) {
 				uni.showLoading({
@@ -242,8 +248,12 @@
 				const res = await db.collection('dorm_apply').where({
 					floor: floor,
 					status: this.tabList[tabsIndex].status,
-					openid: uni.getStorageSync('openid'),
+					// #ifdef MP-WEIXIN
+					openid: uni.getStorageSync('openid')
+					// #endif
+					// #ifndef MP-WEIXIN
 					userId: uni.getStorageSync('userId')
+					// #endif
 				}).orderBy('createTime', 'desc').get()
 				this.applyData = res.result.data
 				uni.hideLoading()
@@ -310,7 +320,7 @@
 					// 订阅报修订单提醒
 					// #ifdef MP-WEIXIN
 					wx.requestSubscribeMessage({
-					    tmplIds: ['4Lnbo47VBu7woS0m0O8UjZ-7TBozETC4Mr5tdkwJ4v4'],
+						tmplIds: ['4Lnbo47VBu7woS0m0O8UjZ-7TBozETC4Mr5tdkwJ4v4'],
 					})
 					// #endif
 				}
@@ -326,6 +336,7 @@
 </style>
 <style lang="scss" scoped>
 	@import '../../styles/index.scss';
+
 	.ad-banner {
 		view {
 			width: 100%;
