@@ -56,6 +56,7 @@
 </template>
 
 <script>
+	const db = uniCloud.database()
 	export default {
 		data() {
 			return {
