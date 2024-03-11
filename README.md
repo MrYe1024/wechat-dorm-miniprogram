@@ -5,6 +5,7 @@
 gitee开源  `https://gitee.com/aYuan-git/wechat-dorm-miniprogram.git`，共两个分支，`master` 分支为原生小程序云开发，`uniapp` 分支为 `uniCloud` 云开发，请拉取 `uniapp` 分支代码。
 
 ## 项目部署文档地址
+[中文开源地址](https://gitee.com/aYuan-git/wechat-dorm-miniprogram.git)
 [项目部署文档地址](https://juejin.cn/post/7208445726905319485)
 
 ## 项目体验
