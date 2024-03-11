@@ -9,6 +9,5 @@ gitee开源  `https://gitee.com/aYuan-git/wechat-dorm-miniprogram.git`，共两�
 [项目部署文档地址](https://juejin.cn/post/7208445726905319485)
 
 ## 项目体验
-
 ![ssbx.jpg](https://mp-e93e0c5f-05cf-4713-9d34-a6449768f5b0.cdn.bspapp.com/cloudstorage/gh_6d5907af00c8_258.jpg)
 
